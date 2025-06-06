@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Abrigos Management</title>
+    <script>
+        async function fetchAbrigos() {
+            const response = await fetch('/api/abrigos');
+            const abrigos = await response.json();
+            const list = document.getElementById('abrigo-list');
+            list.innerHTML = '';
+            abrigos.forEach(abrigo => {
+                const item = document.createElement('li');
+                item.textContent = `${abrigo.nomeLocal} - ${abrigo.endereco} - ${abrigo.regiao}`;
+                list.appendChild(item);
+            });
+        }
+
+        async function createAbrigo(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = {
+                nomeLocal: form.nomeLocal.value,
+                endereco: form.endereco.value,
+                regiao: form.regiao.value,
+                capacidadePessoas: parseInt(form.capacidadePessoas.value),
+                capacidadeCarros: parseInt(form.capacidadeCarros.value),
+                contatoResponsavel: form.contatoResponsavel.value,
+                descricao: form.descricao.value
+            };
+            const response = await fetch('/api/abrigos', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                alert('Abrigo criado com sucesso!');
+                form.reset();
+                fetchAbrigos();
+            } else {
+                alert('Erro ao criar abrigo.');
+            }
+        }
+
+        window.onload = () => {
+            fetchAbrigos();
+            document.getElementById('abrigo-form').addEventListener('submit', createAbrigo);
+        };
+    </script>
+</head>
+<body>
+    <h1>Gerenciamento de Abrigos</h1>
+    <h2>Lista de Abrigos</h2>
+    <ul id="abrigo-list"></ul>
+
+    <h2>Criar Novo Abrigo</h2>
+    <form id="abrigo-form">
+        <label>Nome do Local: <input type="text" name="nomeLocal" required></label><br>
+        <label>Endereço: <input type="text" name="endereco" required></label><br>
+        <label>Região: <input type="text" name="regiao" required></label><br>
+        <label>Capacidade de Pessoas: <input type="number" name="capacidadePessoas" required></label><br>
+        <label>Capacidade de Carros: <input type="number" name="capacidadeCarros" required></label><br>
+        <label>Contato Responsável: <input type="text" name="contatoResponsavel" required></label><br>
+        <label>Descrição: <textarea name="descricao" required></textarea></label><br>
+        <button type="submit">Criar Abrigo</button>
+    </form>
+</body>
+</html>

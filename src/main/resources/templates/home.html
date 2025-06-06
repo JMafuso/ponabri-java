@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Home - Access Endpoints</title>
+</head>
+<body>
+    <h1>Welcome to the Home Page</h1>
+    <p>This page provides access to the application endpoints.</p>
+    <ul>
+        <li><a th:href="@{/abrigos}">Abrigos</a></li>
+        <li><a th:href="@{/reservas}">Reservas</a></li>
+        <li><a th:href="@{/usuarios}">Usuarios</a></li>
+    </ul>
+</body>
+</html>
