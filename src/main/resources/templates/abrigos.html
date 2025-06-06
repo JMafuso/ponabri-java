@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <title>Abrigos Management</title>
     <script>
+        let currentEditId = null;
+
         async function fetchAbrigos() {
             const response = await fetch('/api/abrigos');
             const abrigos = await response.json();
@@ -11,7 +13,18 @@
             list.innerHTML = '';
             abrigos.forEach(abrigo => {
                 const item = document.createElement('li');
-                item.textContent = `${abrigo.nomeLocal} - ${abrigo.endereco} - ${abrigo.regiao}`;
+                item.textContent = `${abrigo.nomeLocal} - ${abrigo.endereco} - ${abrigo.regiao} `;
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Editar';
+                editButton.onclick = () => populateEditForm(abrigo);
+                item.appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Excluir';
+                deleteButton.onclick = () => deleteAbrigo(abrigo.id);
+                item.appendChild(deleteButton);
+
                 list.appendChild(item);
             });
         }
@@ -42,9 +55,76 @@
             }
         }
 
+        function populateEditForm(abrigo) {
+            currentEditId = abrigo.id;
+            const form = document.getElementById('abrigo-form');
+            form.nomeLocal.value = abrigo.nomeLocal;
+            form.endereco.value = abrigo.endereco;
+            form.regiao.value = abrigo.regiao;
+            form.capacidadePessoas.value = abrigo.capacidadePessoas;
+            form.capacidadeCarros.value = abrigo.capacidadeCarros;
+            form.contatoResponsavel.value = abrigo.contatoResponsavel;
+            form.descricao.value = abrigo.descricao;
+            document.getElementById('submit-button').textContent = 'Atualizar Abrigo';
+        }
+
+        async function updateAbrigo(event) {
+            event.preventDefault();
+            if (!currentEditId) {
+                alert('Nenhum abrigo selecionado para atualização.');
+                return;
+            }
+            const form = event.target;
+            const data = {
+                nomeLocal: form.nomeLocal.value,
+                endereco: form.endereco.value,
+                regiao: form.regiao.value,
+                capacidadePessoas: parseInt(form.capacidadePessoas.value),
+                capacidadeCarros: parseInt(form.capacidadeCarros.value),
+                contatoResponsavel: form.contatoResponsavel.value,
+                descricao: form.descricao.value
+            };
+            const response = await fetch(`/api/abrigos/${currentEditId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                alert('Abrigo atualizado com sucesso!');
+                form.reset();
+                currentEditId = null;
+                document.getElementById('submit-button').textContent = 'Criar Abrigo';
+                fetchAbrigos();
+            } else {
+                alert('Erro ao atualizar abrigo.');
+            }
+        }
+
+        async function deleteAbrigo(id) {
+            if (!confirm('Tem certeza que deseja excluir este abrigo?')) {
+                return;
+            }
+            const response = await fetch(`/api/abrigos/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('Abrigo excluído com sucesso!');
+                fetchAbrigos();
+            } else {
+                alert('Erro ao excluir abrigo.');
+            }
+        }
+
         window.onload = () => {
             fetchAbrigos();
-            document.getElementById('abrigo-form').addEventListener('submit', createAbrigo);
+            const form = document.getElementById('abrigo-form');
+            form.addEventListener('submit', event => {
+                if (currentEditId) {
+                    updateAbrigo(event);
+                } else {
+                    createAbrigo(event);
+                }
+            });
         };
     </script>
 </head>
@@ -53,7 +133,7 @@
     <h2>Lista de Abrigos</h2>
     <ul id="abrigo-list"></ul>
 
-    <h2>Criar Novo Abrigo</h2>
+    <h2 id="form-title">Criar / Atualizar Abrigo</h2>
     <form id="abrigo-form">
         <label>Nome do Local: <input type="text" name="nomeLocal" required></label><br>
         <label>Endereço: <input type="text" name="endereco" required></label><br>
@@ -62,7 +142,7 @@
         <label>Capacidade de Carros: <input type="number" name="capacidadeCarros" required></label><br>
         <label>Contato Responsável: <input type="text" name="contatoResponsavel" required></label><br>
         <label>Descrição: <textarea name="descricao" required></textarea></label><br>
-        <button type="submit">Criar Abrigo</button>
+        <button type="submit" id="submit-button">Criar Abrigo</button>
     </form>
 </body>
 </html>

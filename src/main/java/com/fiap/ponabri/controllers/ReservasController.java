@@ -76,8 +76,8 @@ public class ReservasController {
         }
         abrigoRepository.save(abrigo);
 
-        // Gerar código reserva único
-        String codigoReserva = UUID.randomUUID().toString();
+        // Gerar código reserva único no formato PONABRI-XXXXXXXX
+        String codigoReserva = "PONABRI-" + generateRandomAlphanumeric(8);
 
         Reserva reserva = Reserva.builder()
                 .codigoReserva(codigoReserva)
@@ -118,5 +118,15 @@ public class ReservasController {
         dto.setDataCriacao(reserva.getDataCriacao());
         dto.setStatus(reserva.getStatus());
         return dto;
+    }
+
+    private String generateRandomAlphanumeric(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+        StringBuilder sb = new StringBuilder();
+        java.util.Random random = new java.util.Random();
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
     }
 }
