@@ -16,12 +16,25 @@
             });
         }
 
+        async function fetchAbrigos() {
+            const response = await fetch('/api/abrigos');
+            const abrigos = await response.json();
+            const select = document.getElementById('abrigo-select');
+            select.innerHTML = '';
+            abrigos.forEach(abrigo => {
+                const option = document.createElement('option');
+                option.value = abrigo.id;
+                option.textContent = `${abrigo.nomeLocal} - ${abrigo.endereco}`;
+                select.appendChild(option);
+            });
+        }
+
         async function createReserva(event) {
             event.preventDefault();
             const form = event.target;
             const data = {
                 usuarioId: parseInt(form.usuarioId.value),
-                abrigoId: parseInt(form.abrigoId.value),
+                abrigoId: parseInt(form['abrigo-select'].value),
                 quantidadePessoas: parseInt(form.quantidadePessoas.value),
                 usouVagaCarro: form.usouVagaCarro.checked
             };
@@ -31,7 +44,8 @@
                 body: JSON.stringify(data)
             });
             if (response.ok) {
-                alert('Reserva criada com sucesso!');
+                const reserva = await response.json();
+                alert('Reserva criada com sucesso! Código da reserva: ' + reserva.codigoReserva);
                 form.reset();
                 fetchReservas();
             } else {
@@ -41,6 +55,7 @@
 
         window.onload = () => {
             fetchReservas();
+            fetchAbrigos();
             document.getElementById('reserva-form').addEventListener('submit', createReserva);
         };
     </script>
@@ -53,7 +68,11 @@
     <h2>Criar Nova Reserva</h2>
     <form id="reserva-form">
         <label>ID do Usuário: <input type="number" name="usuarioId" required></label><br>
-        <label>ID do Abrigo: <input type="number" name="abrigoId" required></label><br>
+        <label>Abrigo: 
+            <select id="abrigo-select" name="abrigo-select" required>
+                <!-- Options populated dynamically -->
+            </select>
+        </label><br>
         <label>Quantidade de Pessoas: <input type="number" name="quantidadePessoas" required></label><br>
         <label>Usou Vaga de Carro: <input type="checkbox" name="usouVagaCarro"></label><br>
         <button type="submit">Criar Reserva</button>
