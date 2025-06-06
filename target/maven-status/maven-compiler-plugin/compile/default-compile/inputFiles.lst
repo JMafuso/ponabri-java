@@ -1,10 +1,13 @@
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\config\SecurityConfig.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\controllers\AbrigosController.java
+C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\controllers\AuthController.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\controllers\HomeController.java
+C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\controllers\PagesController.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\controllers\ReservasController.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\controllers\UsuariosController.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\dto\AbrigoCreateDto.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\dto\AbrigoResponseDto.java
+C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\dto\JwtResponseDto.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\dto\ReservaCreateDto.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\dto\ReservaResponseDto.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\dto\TokenResponseDto.java
@@ -15,9 +18,13 @@ C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\entit
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\entities\Usuario.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\enums\AbrigoStatus.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\enums\ReservaStatus.java
+C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\exception\GlobalExceptionHandler.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\PonabriApplication.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\repositories\AbrigoRepository.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\repositories\ReservaRepository.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\repositories\UsuarioRepository.java
+C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\security\JwtAuthenticationFilter.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\security\JwtTokenProvider.java
+C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\security\JwtUtils.java
+C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\service\CustomUserDetailsService.java
 C:\Users\godma\Desktop\Ponabri-Java\Ponabri\src\main\java\com\fiap\ponabri\services\AbrigoAIService.java

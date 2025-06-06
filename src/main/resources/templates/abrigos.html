@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <title>Abrigos Management</title>
+    <script src="/static/js/authInterceptor.js"></script>
     <script>
         let currentEditId = null;
 
         async function fetchAbrigos() {
             const response = await fetch('/api/abrigos');
+            if (!response.ok) {
+                alert('Erro ao buscar abrigos. Verifique se está autenticado.');
+                return;
+            }
             const abrigos = await response.json();
             const list = document.getElementById('abrigo-list');
             list.innerHTML = '';

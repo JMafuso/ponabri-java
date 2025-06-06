@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Registrar</title>
-    <meta charset="UTF-8" />
+    <title>Registro</title>
 </head>
 <body>
-    <h1>Registrar</h1>
-    <form th:action="@{/registrar}" method="post" th:object="${usuarioRegisterDto}">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" th:field="*{nome}" required />
-        <br/>
-        <label for="email">Email:</label>
-        <input type="email" id="email" th:field="*{email}" required />
-        <br/>
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" th:field="*{senha}" required />
-        <br/>
-        <button type="submit">Registrar</button>
-    </form>
-    <p>Já tem conta? <a th:href="@{/login}">Login</a></p>
+<h2>Registro</h2>
+<form id="register-form" onsubmit="register(event)">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" name="senha" required><br>
+    <label for="confirmarSenha">Confirmar Senha:</label>
+    <input type="password" id="confirmarSenha" name="confirmarSenha" required><br>
+    <button type="submit">Registrar</button>
+</form>
+<p>Já tem uma conta? <a th:href="@{/login}">Faça login</a></p>
+<script src="/js/auth.js"></script>
 </body>
 </html>

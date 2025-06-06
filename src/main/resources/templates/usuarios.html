@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Usuários</title>
+    <meta charset="UTF-8" />
+    <script src="/static/js/authInterceptor.js"></script>
+    <script>
+        async function fetchUsuarios() {
+            const response = await fetch('/api/usuarios');
+            if (!response.ok) {
+                alert('Erro ao buscar usuários. Verifique se está autenticado.');
+                return;
+            }
+            const usuarios = await response.json();
+            const list = document.getElementById('usuario-list');
+            list.innerHTML = '';
+            usuarios.forEach(usuario => {
+                const item = document.createElement('li');
+                item.textContent = `ID: ${usuario.id} - Nome: ${usuario.nome} - Email: ${usuario.email}`;
+                list.appendChild(item);
+            });
+        }
+
+        window.onload = () => {
+            fetchUsuarios();
+        };
+    </script>
+</head>
+<body>
+    <h1>Lista de Usuários</h1>
+    <ul id="usuario-list"></ul>
+</body>
+</html>

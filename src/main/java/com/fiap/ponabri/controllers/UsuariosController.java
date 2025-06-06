@@ -31,47 +31,5 @@ public class UsuariosController {
         return usuarioRepository.findAll();
     }
 
-    @PostMapping("/registrar")
-    @org.springframework.transaction.annotation.Transactional
-    public String registrarUsuario(@Valid @ModelAttribute UsuarioRegisterDto usuarioDto, org.springframework.validation.BindingResult bindingResult) {
-        System.out.println("Tentativa de registro para email: " + usuarioDto.getEmail());
-        if (bindingResult.hasErrors()) {
-            System.out.println("Erro de validação no registro.");
-            return "register";
-        }
-        if (usuarioRepository.findByEmail(usuarioDto.getEmail()).isPresent()) {
-            System.out.println("Email já cadastrado: " + usuarioDto.getEmail());
-            return "redirect:/register?error=email";
-        }
-
-        Usuario usuario = Usuario.builder()
-                .nome(usuarioDto.getNome())
-                .email(usuarioDto.getEmail())
-                .senha(usuarioDto.getSenha())
-                .role("USER")
-                .build();
-
-        usuarioRepository.save(usuario);
-        System.out.println("Registro bem-sucedido para email: " + usuarioDto.getEmail());
-
-        return "redirect:/login?success";
-    }
-
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute UsuarioLoginDto loginDto) {
-        System.out.println("Tentativa de login para email: " + loginDto.getEmail());
-        Usuario usuario = usuarioRepository.findByEmail(loginDto.getEmail()).orElse(null);
-        if (usuario != null) {
-            System.out.println("Usuário encontrado: " + usuario.getEmail());
-            if (usuario.getSenha().equals(loginDto.getSenha())) {
-                System.out.println("Senha correta. Login bem-sucedido.");
-                return "redirect:/home";
-            } else {
-                System.out.println("Senha incorreta.");
-            }
-        } else {
-            System.out.println("Usuário não encontrado.");
-        }
-        return "redirect:/login?error";
-    }
+    // Removidos os métodos POST /registrar e /login para evitar conflito com AuthController REST
 }

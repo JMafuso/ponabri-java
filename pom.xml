@@ -18,6 +18,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring.boot.version>3.3.0</spring.boot.version>
+        <jjwt.version>0.11.5</jjwt.version>
     </properties>
 
     <dependencyManagement>
@@ -49,18 +50,28 @@
             <version>19.8.0.0</version>
         </dependency>
 
-        <!-- Removed Spring Security dependencies -->
-<!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
 
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-jose</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
--->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,12 +83,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
         </dependency>
 
         <dependency>
@@ -101,11 +106,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Removed H2 dependency to prevent in-memory DB auto-configuration -->
+        <!--
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        -->
 
     </dependencies>
     <build>

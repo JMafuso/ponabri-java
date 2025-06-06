@@ -1,0 +1,192 @@
+# Created at 2025-06-06T19:55:58.568
+Exiting self fork JVM. Received SHUTDOWN command from Maven shutdown hook.
+Thread dump before exiting the process (58968@MAFUSO):
+"main" 
+   java.lang.Thread.State: RUNNABLE
+        at app//org.springframework.security.crypto.bcrypt.BCrypt.key(BCrypt.java:438)
+        at app//org.springframework.security.crypto.bcrypt.BCrypt.crypt_raw(BCrypt.java:559)
+        at app//org.springframework.security.crypto.bcrypt.BCrypt.hashpw(BCrypt.java:656)
+        at app//org.springframework.security.crypto.bcrypt.BCrypt.hashpw(BCrypt.java:603)
+        at app//org.springframework.security.crypto.bcrypt.BCrypt.hashpw(BCrypt.java:593)
+        at app//org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.encode(BCryptPasswordEncoder.java:110)
+        at app//com.fiap.ponabri.controllers.AuthController.registerUser(AuthController.java:41)
+        at java.base@17.0.12/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base@17.0.12/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+        at java.base@17.0.12/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base@17.0.12/java.lang.reflect.Method.invoke(Method.java:568)
+        at app//org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+        at app//org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+        at app//org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+        at app//org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+        at app//org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+        at app//org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+        at app//org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+        at app//org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+        at app//org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+        at app//org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+        at app//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+        at app//org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+        at app//org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+        at app//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+        at app//org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+        at app//org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+        at app//org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+        at app//org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+        at app//org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+        at app//org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+        at app//org.springframework.security.web.FilterChainProxy$$Lambda$2123/0x0000013409c0ed88.doFilter(Unknown Source)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+        at app//org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+        at app//org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+        at app//org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//com.fiap.ponabri.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+        at app//org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+        at app//org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+        at app//org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+        at app//org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+        at app//org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+        at app//org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+        at app//org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+        at app//org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda$1045/0x00000134095dbe70.doFilter(Unknown Source)
+        at app//org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+        at app//org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+        at app//org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+        at app//org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+        at app//org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+        at app//org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+        at app//org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+        at app//org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+        at app//org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+        at app//org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+        at app//org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+        at app//org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+        at app//org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+        at app//org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+        at app//org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+        at app//org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+        at app//com.fiap.ponabri.controllers.AuthFlowIntegrationTest.testRegisterLoginAndAccessProtectedEndpoint(AuthFlowIntegrationTest.java:53)
+        at java.base@17.0.12/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base@17.0.12/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+        at java.base@17.0.12/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base@17.0.12/java.lang.reflect.Method.invoke(Method.java:568)
+
+"Reference Handler" 
+   java.lang.Thread.State: RUNNABLE
+        at java.base@17.0.12/java.lang.ref.Reference.waitForReferencePendingList(Native Method)
+        at java.base@17.0.12/java.lang.ref.Reference.processPendingReferences(Reference.java:253)
+        at java.base@17.0.12/java.lang.ref.Reference$ReferenceHandler.run(Reference.java:215)
+
+"Finalizer" 
+   java.lang.Thread.State: WAITING
+        at java.base@17.0.12/java.lang.Object.wait(Native Method)
+        at java.base@17.0.12/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:155)
+        at java.base@17.0.12/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:176)
+        at java.base@17.0.12/java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:172)
+
+"Signal Dispatcher" 
+   java.lang.Thread.State: RUNNABLE
+
+"Attach Listener" 
+   java.lang.Thread.State: RUNNABLE
+
+"Notification Thread" 
+   java.lang.Thread.State: RUNNABLE
+
+"Common-Cleaner" 
+   java.lang.Thread.State: TIMED_WAITING
+        at java.base@17.0.12/java.lang.Object.wait(Native Method)
+        at java.base@17.0.12/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:155)
+        at java.base@17.0.12/jdk.internal.ref.CleanerImpl.run(CleanerImpl.java:140)
+        at java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+        at java.base@17.0.12/jdk.internal.misc.InnocuousThread.run(InnocuousThread.java:162)
+
+"surefire-forkedjvm-stream-flusher" 
+   java.lang.Thread.State: TIMED_WAITING
+        at java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+        at java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+        at java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+        at java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+        at java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+        at java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+        at java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+        at java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+
+"surefire-forkedjvm-command-thread" 
+   java.lang.Thread.State: RUNNABLE
+        at java.management@17.0.12/sun.management.ThreadImpl.getThreadInfo1(Native Method)
+        at java.management@17.0.12/sun.management.ThreadImpl.getThreadInfo(ThreadImpl.java:197)
+        at app//org.apache.maven.surefire.booter.ForkedBooter.generateThreadDump(ForkedBooter.java:579)
+        at app//org.apache.maven.surefire.booter.ForkedBooter.access$600(ForkedBooter.java:79)
+        at app//org.apache.maven.surefire.booter.ForkedBooter$4.update(ForkedBooter.java:315)
+        at app//org.apache.maven.surefire.booter.CommandReader$CommandRunnable.callListeners(CommandReader.java:357)
+        at app//org.apache.maven.surefire.booter.CommandReader$CommandRunnable.exitByConfiguration(CommandReader.java:367)
+        at app//org.apache.maven.surefire.booter.CommandReader$CommandRunnable.run(CommandReader.java:330)
+        at java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+
+"Timer-0" 
+   java.lang.Thread.State: WAITING
+        at java.base@17.0.12/java.lang.Object.wait(Native Method)
+        at java.base@17.0.12/java.lang.Object.wait(Object.java:338)
+        at java.base@17.0.12/java.util.TimerThread.mainLoop(Timer.java:537)
+        at java.base@17.0.12/java.util.TimerThread.run(Timer.java:516)
+
+"oracle.jdbc.driver.BlockSource.ThreadedCachingBlockSource.BlockReleaser" 
+   java.lang.Thread.State: TIMED_WAITING
+        at java.base@17.0.12/java.lang.Object.wait(Native Method)
+        at app//oracle.jdbc.driver.BlockSource$ThreadedCachingBlockSource$BlockReleaser.run(BlockSource.java:331)
+
+"InterruptTimer" 
+   java.lang.Thread.State: TIMED_WAITING
+        at java.base@17.0.12/java.lang.Object.wait(Native Method)
+        at java.base@17.0.12/java.util.TimerThread.mainLoop(Timer.java:563)
+        at java.base@17.0.12/java.util.TimerThread.run(Timer.java:516)
+
+"HikariPool-1 housekeeper" 
+   java.lang.Thread.State: TIMED_WAITING
+        at java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+        at java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+        at java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+        at java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+        at java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+        at java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+        at java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+        at java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+
+
+

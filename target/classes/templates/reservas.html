@@ -2,30 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Reservas Management</title>
+    <title>Gerenciamento de Reservas</title>
+    <script src="/static/js/authInterceptor.js"></script>
     <script>
+        let currentEditId = null;
+
         async function fetchReservas() {
             const response = await fetch('/api/reservas');
+            if (!response.ok) {
+                alert('Erro ao buscar reservas. Verifique se está autenticado.');
+                return;
+            }
             const reservas = await response.json();
             const list = document.getElementById('reserva-list');
             list.innerHTML = '';
             reservas.forEach(reserva => {
                 const item = document.createElement('li');
-                item.textContent = `Reserva ${reserva.codigoReserva} - Abrigo ID: ${reserva.abrigoId} - Usuário ID: ${reserva.usuarioId} - Pessoas: ${reserva.quantidadePessoas}`;
-                list.appendChild(item);
-            });
-        }
+                item.textContent = `Código: ${reserva.codigoReserva} - Abrigo: ${reserva.abrigo.nomeLocal} - Usuário: ${reserva.usuario.nome} - Status: ${reserva.status}`;
 
-        async function fetchAbrigos() {
-            const response = await fetch('/api/abrigos');
-            const abrigos = await response.json();
-            const select = document.getElementById('abrigo-select');
-            select.innerHTML = '';
-            abrigos.forEach(abrigo => {
-                const option = document.createElement('option');
-                option.value = abrigo.id;
-                option.textContent = `${abrigo.nomeLocal} - ${abrigo.endereco}`;
-                select.appendChild(option);
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Excluir';
+                deleteButton.onclick = () => deleteReserva(reserva.id);
+                item.appendChild(deleteButton);
+
+                list.appendChild(item);
             });
         }
 
@@ -33,10 +33,9 @@
             event.preventDefault();
             const form = event.target;
             const data = {
-                usuarioId: parseInt(form.usuarioId.value),
-                abrigoId: parseInt(form['abrigo-select'].value),
-                quantidadePessoas: parseInt(form.quantidadePessoas.value),
-                usouVagaCarro: form.usouVagaCarro.checked
+                usuarioId: form.usuarioId.value,
+                abrigoId: form.abrigoId.value,
+                dataReserva: form.dataReserva.value
             };
             const response = await fetch('/api/reservas', {
                 method: 'POST',
@@ -44,8 +43,7 @@
                 body: JSON.stringify(data)
             });
             if (response.ok) {
-                const reserva = await response.json();
-                alert('Reserva criada com sucesso! Código da reserva: ' + reserva.codigoReserva);
+                alert('Reserva criada com sucesso!');
                 form.reset();
                 fetchReservas();
             } else {
@@ -53,10 +51,25 @@
             }
         }
 
+        async function deleteReserva(id) {
+            if (!confirm('Tem certeza que deseja excluir esta reserva?')) {
+                return;
+            }
+            const response = await fetch(`/api/reservas/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('Reserva excluída com sucesso!');
+                fetchReservas();
+            } else {
+                alert('Erro ao excluir reserva.');
+            }
+        }
+
         window.onload = () => {
             fetchReservas();
-            fetchAbrigos();
-            document.getElementById('reserva-form').addEventListener('submit', createReserva);
+            const form = document.getElementById('reserva-form');
+            form.addEventListener('submit', createReserva);
         };
     </script>
 </head>
@@ -65,16 +78,11 @@
     <h2>Lista de Reservas</h2>
     <ul id="reserva-list"></ul>
 
-    <h2>Criar Nova Reserva</h2>
+    <h2>Criar Reserva</h2>
     <form id="reserva-form">
-        <label>ID do Usuário: <input type="number" name="usuarioId" required></label><br>
-        <label>Abrigo: 
-            <select id="abrigo-select" name="abrigo-select" required>
-                <!-- Options populated dynamically -->
-            </select>
-        </label><br>
-        <label>Quantidade de Pessoas: <input type="number" name="quantidadePessoas" required></label><br>
-        <label>Usou Vaga de Carro: <input type="checkbox" name="usouVagaCarro"></label><br>
+        <label>Usuário ID: <input type="text" name="usuarioId" required></label><br>
+        <label>Abrigo ID: <input type="text" name="abrigoId" required></label><br>
+        <label>Data da Reserva: <input type="date" name="dataReserva" required></label><br>
         <button type="submit">Criar Reserva</button>
     </form>
 </body>
