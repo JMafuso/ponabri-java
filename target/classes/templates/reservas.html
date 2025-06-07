@@ -289,8 +289,8 @@
                             <i class="fas fa-calendar-check"></i>
                             <div class="reserva-details">
                                 <span class="reserva-codigo">Código: ${reserva.codigoReserva}</span>
-                                <span>Abrigo: ${reserva.abrigo.nomeLocal}</span>
-                                <span>Usuário: ${reserva.usuario.nome}</span>
+                                <span>Abrigo: ${reserva.abrigoInfo ? reserva.abrigoInfo.nomeLocal : 'N/A'}</span>
+                                <span>Usuário: ${reserva.usuarioInfo ? reserva.usuarioInfo.nome : 'N/A'}</span>
                                 <span class="reserva-status">Status: ${reserva.status}</span>
                             </div>
                         </div>
@@ -359,9 +359,56 @@
 
         window.onload = () => {
             fetchReservas();
+            carregarAbrigos();
             const form = document.getElementById('reserva-form');
             form.addEventListener('submit', createReserva);
         };
+
+        async function carregarAbrigos() {
+            try {
+                const response = await fetch('/api/abrigos');
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar abrigos');
+                }
+                const abrigos = await response.json();
+                const abrigoSelect = document.getElementById('abrigoSelect');
+                abrigos.forEach(abrigo => {
+                    const option = document.createElement('option');
+                    option.value = abrigo.id;
+                    option.textContent = abrigo.nomeLocal;
+                    abrigoSelect.appendChild(option);
+                });
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        async function createReserva(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = {
+                abrigoId: parseInt(form.abrigoId.value),
+                quantidadePessoas: parseInt(form.quantidadePessoas.value),
+                usouVagaCarro: form.usouVagaCarro.value === 'true'
+            };
+
+            try {
+                const response = await fetch('/api/reservas', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Erro ao criar reserva');
+                }
+                alert('Reserva criada com sucesso!');
+                form.reset();
+                fetchReservas();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
     </script>
 </head>
 <body>
@@ -381,16 +428,21 @@
             <h2>Criar Reserva</h2>
             <form id="reserva-form">
                 <div class="form-group">
-                    <label for="usuarioId"><i class="fas fa-user"></i> Usuário ID:</label>
-                    <input type="text" id="usuarioId" name="usuarioId" required placeholder="ID do usuário">
+                    <label for="abrigoSelect"><i class="fas fa-home"></i> Abrigo:</label>
+                    <select id="abrigoSelect" name="abrigoId" required>
+                        <option value="" disabled selected>Selecione um abrigo</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="abrigoId"><i class="fas fa-home"></i> Abrigo ID:</label>
-                    <input type="text" id="abrigoId" name="abrigoId" required placeholder="ID do abrigo">
+                    <label for="quantidadePessoas"><i class="fas fa-users"></i> Quantidade de Pessoas:</label>
+                    <input type="number" id="quantidadePessoas" name="quantidadePessoas" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="dataReserva"><i class="fas fa-calendar"></i> Data da Reserva:</label>
-                    <input type="date" id="dataReserva" name="dataReserva" required>
+                    <label for="usouVagaCarro"><i class="fas fa-car"></i> Usou Vaga de Carro:</label>
+                    <select id="usouVagaCarro" name="usouVagaCarro" required>
+                        <option value="false" selected>Não</option>
+                        <option value="true">Sim</option>
+                    </select>
                 </div>
                 <button type="submit"><i class="fas fa-plus"></i> Criar Reserva</button>
             </form>

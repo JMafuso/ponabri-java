@@ -39,6 +39,7 @@ public class AuthController {
         usuario.setNome(registerDto.getNome());
         usuario.setEmail(registerDto.getEmail());
         usuario.setSenha(passwordEncoder.encode(registerDto.getSenha()));
+        // Define a role padrão como USER para novos usuários
         usuario.setRole("USER");
         usuarioRepository.save(usuario);
         return ResponseEntity.ok("Usuário registrado com sucesso!");

@@ -36,6 +36,7 @@ public class AbrigosController {
                 .vagasCarrosDisponiveis(dto.getCapacidadeCarros())
                 .contatoResponsavel(dto.getContatoResponsavel())
                 .descricao(dto.getDescricao())
+                .status(AbrigoStatus.ATIVO)
                 .build();
 
         Abrigo salvo = abrigoRepository.save(abrigo);
@@ -79,7 +80,7 @@ public class AbrigosController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAbrigo(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarAbrigo(@PathVariable("id") Long id) {
         if (!abrigoRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

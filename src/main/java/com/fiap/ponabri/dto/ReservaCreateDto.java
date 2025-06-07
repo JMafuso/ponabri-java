@@ -7,9 +7,6 @@ import lombok.Data;
 @Data
 public class ReservaCreateDto {
 
-    @NotNull(message = "{reserva.usuarioId.notnull}")
-    private Long usuarioId;
-
     @NotNull(message = "{reserva.abrigoId.notnull}")
     private Long abrigoId;
 

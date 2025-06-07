@@ -10,23 +10,21 @@ import com.fiap.ponabri.repositories.AbrigoRepository;
 import com.fiap.ponabri.repositories.ReservaRepository;
 import com.fiap.ponabri.repositories.UsuarioRepository;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.fiap.ponabri.dto.AbrigoInfoDto;
+import com.fiap.ponabri.dto.UsuarioInfoDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController; // Use apenas @RestController
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RestController // Mantenha apenas @RestController para controladores REST
+@RestController
 @RequestMapping("/api/reservas")
 public class ReservasController {
 
@@ -44,11 +42,9 @@ public class ReservasController {
 
     private static final String FILA_RESERVAS = "filaReservas";
 
-    // Deixe apenas um método para /reservas GET, se ele realmente for para uma view Thymeleaf.
-    // Se for uma API REST, este método geralmente não seria um `String`.
     @GetMapping("/reservas")
     public String reservasPage() {
-        return "reservas"; // Assume que "reservas" é o nome de um template Thymeleaf
+        return "reservas";
     }
 
     @GetMapping
@@ -62,8 +58,11 @@ public class ReservasController {
 
     @PostMapping
     public ResponseEntity<?> criarReserva(@Valid @RequestBody ReservaCreateDto dto) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(dto.getUsuarioId());
-        if (usuarioOpt.isEmpty()) {
+        System.out.println("Received ReservaCreateDto: " + dto);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+        if (usuario == null) {
             return ResponseEntity.badRequest().body("Usuário não encontrado.");
         }
         Optional<Abrigo> abrigoOpt = abrigoRepository.findById(dto.getAbrigoId());
@@ -73,26 +72,23 @@ public class ReservasController {
 
         Abrigo abrigo = abrigoOpt.get();
 
-        // Verificar vagas disponíveis
         if (dto.getQuantidadePessoas() > abrigo.getVagasPessoasDisponiveis()) {
             return ResponseEntity.badRequest().body("Não há vagas suficientes para pessoas.");
         } else if (dto.getUsouVagaCarro() && abrigo.getVagasCarrosDisponiveis() < 1) {
             return ResponseEntity.badRequest().body("Não há vagas de carro disponíveis.");
         }
 
-        // Decrementar vagas
         abrigo.setVagasPessoasDisponiveis(abrigo.getVagasPessoasDisponiveis() - dto.getQuantidadePessoas());
         if (dto.getUsouVagaCarro()) {
             abrigo.setVagasCarrosDisponiveis(abrigo.getVagasCarrosDisponiveis() - 1);
         }
         abrigoRepository.save(abrigo);
 
-        // Gerar código reserva único no formato PONABRI-XXXXXXXX
         String codigoReserva = "PONABRI-" + generateRandomAlphanumeric(8);
 
         Reserva reserva = Reserva.builder()
                 .codigoReserva(codigoReserva)
-                .usuario(usuarioOpt.get())
+                .usuario(usuario)
                 .abrigo(abrigo)
                 .quantidadePessoas(dto.getQuantidadePessoas())
                 .usouVagaCarro(dto.getUsouVagaCarro())
@@ -102,7 +98,6 @@ public class ReservasController {
 
         Reserva salva = reservaRepository.save(reserva);
 
-        // Publicar mensagem na fila RabbitMQ
         rabbitTemplate.convertAndSend(FILA_RESERVAS, salva.getId().toString());
 
         return ResponseEntity.ok(toResponseDto(salva));
@@ -123,7 +118,19 @@ public class ReservasController {
         dto.setId(reserva.getId());
         dto.setCodigoReserva(reserva.getCodigoReserva());
         dto.setUsuarioId(reserva.getUsuario().getId());
+
+        UsuarioInfoDto usuarioInfo = new UsuarioInfoDto();
+        usuarioInfo.setId(reserva.getUsuario().getId());
+        usuarioInfo.setNome(reserva.getUsuario().getNome());
+        dto.setUsuarioInfo(usuarioInfo);
+
         dto.setAbrigoId(reserva.getAbrigo().getId());
+
+        AbrigoInfoDto abrigoInfo = new AbrigoInfoDto();
+        abrigoInfo.setId(reserva.getAbrigo().getId());
+        abrigoInfo.setNomeLocal(reserva.getAbrigo().getNomeLocal());
+        dto.setAbrigoInfo(abrigoInfo);
+
         dto.setQuantidadePessoas(reserva.getQuantidadePessoas());
         dto.setUsouVagaCarro(reserva.getUsouVagaCarro());
         dto.setDataCriacao(reserva.getDataCriacao());
@@ -139,5 +146,24 @@ public class ReservasController {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
         return sb.toString();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteReserva(@PathVariable Long id) {
+        Optional<Reserva> reservaOpt = reservaRepository.findById(id);
+        if (reservaOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Reserva reserva = reservaOpt.get();
+
+        Abrigo abrigo = reserva.getAbrigo();
+        abrigo.setVagasPessoasDisponiveis(abrigo.getVagasPessoasDisponiveis() + reserva.getQuantidadePessoas());
+        if (reserva.getUsouVagaCarro()) {
+            abrigo.setVagasCarrosDisponiveis(abrigo.getVagasCarrosDisponiveis() + 1);
+        }
+        abrigoRepository.save(abrigo);
+
+        reservaRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

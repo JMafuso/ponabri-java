@@ -1,3 +1,4 @@
+com\fiap\ponabri\controllers\AbrigosControllerTest.class
 com\fiap\ponabri\controllers\PagesControllerTest.class
 com\fiap\ponabri\controllers\AuthFlowIntegrationTest.class
 com\fiap\ponabri\controllers\AuthControllerTest.class

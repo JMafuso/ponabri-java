@@ -139,6 +139,9 @@
                     <target>17</target>
                     <release>17</release>
                     <fork>true</fork>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
