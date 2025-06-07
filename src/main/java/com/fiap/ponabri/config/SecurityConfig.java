@@ -30,7 +30,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/abrigos", "/reservas", "/api/auth/**", "/api/auth/register", "/js/**", "/css/**", "/images/**", "/static/**", "/home").permitAll()
+                .requestMatchers("/login", "/register", "/api/auth/**", "/api/auth/register", "/js/**", "/css/**", "/images/**", "/static/**", "/home").permitAll()
+                .requestMatchers("/abrigos/**").hasRole("ADMIN")
+                .requestMatchers("/reservas/**").hasRole("USER")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
