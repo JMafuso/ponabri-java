@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/register", "/api/auth/**", "/api/auth/register", "/js/**", "/css/**", "/images/**", "/static/**", "/home").permitAll()
                 .requestMatchers("/abrigos/**").permitAll()
                 .requestMatchers("/reservas/**").permitAll()
+                .requestMatchers("/api/send-message").permitAll()
+                .requestMatchers("/api/ask-ai").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

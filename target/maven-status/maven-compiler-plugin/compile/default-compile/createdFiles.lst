@@ -7,6 +7,7 @@ com\fiap\ponabri\config\RoleDocumentation.class
 com\fiap\ponabri\dto\UsuarioRegisterDto.class
 com\fiap\ponabri\entities\Aviso$AvisoBuilder.class
 com\fiap\ponabri\entities\Aviso.class
+com\fiap\ponabri\dto\AbrigoInfoDto.class
 com\fiap\ponabri\security\JwtTokenProvider.class
 com\fiap\ponabri\service\CustomUserDetailsService.class
 com\fiap\ponabri\dto\JwtResponseDto.class
@@ -20,16 +21,17 @@ com\fiap\ponabri\dto\TokenResponseDto.class
 com\fiap\ponabri\dto\ReservaCreateDto.class
 com\fiap\ponabri\PonabriApplication.class
 com\fiap\ponabri\exception\GlobalExceptionHandler.class
-com\fiap\ponabri\services\AvisoService.class
 com\fiap\ponabri\controllers\AuthController.class
 com\fiap\ponabri\repositories\AbrigoRepository.class
 com\fiap\ponabri\enums\AbrigoStatus.class
 com\fiap\ponabri\controllers\AbrigosController.class
 com\fiap\ponabri\entities\Usuario$UsuarioBuilder.class
+com\fiap\ponabri\dto\UsuarioInfoDto.class
 com\fiap\ponabri\dto\AbrigoCreateDto.class
 com\fiap\ponabri\controllers\HomeController.class
 com\fiap\ponabri\entities\Abrigo.class
 com\fiap\ponabri\security\JwtUtils.class
+com\fiap\ponabri\controllers\ReservasController.class
 com\fiap\ponabri\controllers\UsuariosController.class
 com\fiap\ponabri\config\SecurityConfig.class
 com\fiap\ponabri\dto\UsuarioLoginDto.class

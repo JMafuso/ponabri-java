@@ -40,7 +40,7 @@ public class ReservasController {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    private static final String FILA_RESERVAS = "filaReservas";
+    private static final String FILA_RESERVAS = "simpleQueue";
 
     @GetMapping("/reservas")
     public String reservasPage() {
@@ -98,7 +98,7 @@ public class ReservasController {
 
         Reserva salva = reservaRepository.save(reserva);
 
-        rabbitTemplate.convertAndSend(FILA_RESERVAS, salva.getId().toString());
+        rabbitTemplate.convertAndSend(FILA_RESERVAS, "Mensagem de teste para RabbitMQ");
 
         return ResponseEntity.ok(toResponseDto(salva));
     }
