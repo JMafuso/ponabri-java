@@ -1,24 +1,217 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Usuários</title>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários - PONABRI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --cor-principal: #FF8C00;
+            --cor-secundaria: #FFFACD;
+            --cor-terciaria: #FFA500;
+            --cor-texto-claro: #333333;
+            --cor-vermelho-acao: #DC3545;
+            --sombra-suave: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transicao-padrao: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--cor-texto-claro);
+            background: linear-gradient(135deg, #FFFFF0 0%, #FFFACD 25%, #FFDDAA 50%, #FFC070 75%, #FFA500 100%);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--cor-principal);
+            transition: var(--transicao-padrao);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .content-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            flex-grow: 1;
+        }
+
+        h1 {
+            color: var(--cor-principal);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(12px);
+            overflow-x: auto;
+        }
+
+        #usuario-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #usuario-list li {
+            background: white;
+            margin-bottom: 1rem;
+            padding: 1.2rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transicao-padrao);
+            box-shadow: var(--sombra-suave);
+        }
+
+        #usuario-list li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: var(--cor-secundaria);
+        }
+
+        .usuario-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .usuario-info i {
+            color: var(--cor-principal);
+            font-size: 1.2rem;
+        }
+
+        .usuario-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .usuario-id {
+            font-weight: bold;
+            color: var(--cor-principal);
+        }
+
+        .usuario-nome {
+            font-weight: 500;
+        }
+
+        .usuario-email {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background-color: var(--cor-principal);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 1rem;
+                margin: 0 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            #usuario-list li {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .usuario-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
     <script src="/js/authInterceptor.js"></script>
     <script>
         async function fetchUsuarios() {
-            const response = await fetch('/api/usuarios');
-            if (!response.ok) {
-                alert('Erro ao buscar usuários. Verifique se está autenticado.');
-                return;
+            try {
+                const response = await fetch('/api/usuarios');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar usuários. Verifique se está autenticado.');
+                }
+                const usuarios = await response.json();
+                const list = document.getElementById('usuario-list');
+                list.innerHTML = '';
+                
+                if (usuarios.length === 0) {
+                    list.innerHTML = '<li style="text-align: center; color: #666;">Nenhum usuário cadastrado.</li>';
+                    return;
+                }
+
+                usuarios.forEach(usuario => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `
+                        <div class="usuario-info">
+                            <i class="fas fa-user-circle"></i>
+                            <div class="usuario-details">
+                                <span class="usuario-id">ID: ${usuario.id}</span>
+                                <span class="usuario-nome">${usuario.nome}</span>
+                                <span class="usuario-email">${usuario.email}</span>
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            } catch (error) {
+                console.error('Erro:', error);
+                alert(error.message);
             }
-            const usuarios = await response.json();
-            const list = document.getElementById('usuario-list');
-            list.innerHTML = '';
-            usuarios.forEach(usuario => {
-                const item = document.createElement('li');
-                item.textContent = `ID: ${usuario.id} - Nome: ${usuario.nome} - Email: ${usuario.email}`;
-                list.appendChild(item);
-            });
         }
 
         window.onload = () => {
@@ -27,7 +220,19 @@
     </script>
 </head>
 <body>
-    <h1>Lista de Usuários</h1>
-    <ul id="usuario-list"></ul>
+    <header class="header">
+        <div class="logo">PONABRI</div>
+    </header>
+
+    <main class="content-container">
+        <h1>Lista de Usuários</h1>
+        <div class="table-container">
+            <ul id="usuario-list"></ul>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 PONABRI - Todos os direitos reservados</p>
+    </footer>
 </body>
 </html>
