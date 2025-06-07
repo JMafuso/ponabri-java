@@ -1,53 +1,337 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>Gerenciamento de Reservas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Reservas - PONABRI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --cor-principal: #FF8C00;
+            --cor-secundaria: #FFFACD;
+            --cor-terciaria: #FFA500;
+            --cor-texto-claro: #333333;
+            --cor-vermelho-acao: #DC3545;
+            --sombra-suave: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transicao-padrao: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--cor-texto-claro);
+            background: linear-gradient(135deg, #FFFFF0 0%, #FFFACD 25%, #FFDDAA 50%, #FFC070 75%, #FFA500 100%);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--cor-principal);
+            transition: var(--transicao-padrao);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .content-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            flex-grow: 1;
+        }
+
+        h1, h2 {
+            color: var(--cor-principal);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(12px);
+            margin-bottom: 2rem;
+        }
+
+        #reserva-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #reserva-list li {
+            background: white;
+            margin-bottom: 1rem;
+            padding: 1.2rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transicao-padrao);
+            box-shadow: var(--sombra-suave);
+        }
+
+        #reserva-list li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: var(--cor-secundaria);
+        }
+
+        .reserva-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .reserva-info i {
+            color: var(--cor-principal);
+            font-size: 1.2rem;
+        }
+
+        .reserva-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .reserva-codigo {
+            font-weight: bold;
+            color: var(--cor-principal);
+        }
+
+        .reserva-status {
+            font-size: 0.9rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background-color: var(--cor-secundaria);
+            color: var(--cor-principal);
+            font-weight: 500;
+        }
+
+        .btn-delete {
+            background-color: var(--cor-vermelho-acao);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transicao-padrao);
+            font-weight: bold;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(12px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--cor-texto-claro);
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transicao-padrao);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--cor-principal);
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--cor-principal);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicao-padrao);
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--cor-terciaria);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+        }
+
+        .footer {
+            background-color: var(--cor-principal);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 1rem;
+                margin: 0 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            #reserva-list li {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .reserva-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-delete {
+                width: 100%;
+            }
+        }
+    </style>
     <script src="/js/authInterceptor.js"></script>
     <script>
         let currentEditId = null;
 
         async function fetchReservas() {
-            const response = await fetch('/api/reservas');
-            if (!response.ok) {
-                alert('Erro ao buscar reservas. Verifique se está autenticado.');
-                return;
+            try {
+                const response = await fetch('/api/reservas');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar reservas. Verifique se está autenticado.');
+                }
+                const reservas = await response.json();
+                const list = document.getElementById('reserva-list');
+                list.innerHTML = '';
+
+                if (reservas.length === 0) {
+                    list.innerHTML = '<li style="text-align: center; color: #666;">Nenhuma reserva cadastrada.</li>';
+                    return;
+                }
+
+                reservas.forEach(reserva => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `
+                        <div class="reserva-info">
+                            <i class="fas fa-calendar-check"></i>
+                            <div class="reserva-details">
+                                <span class="reserva-codigo">Código: ${reserva.codigoReserva}</span>
+                                <span>Abrigo: ${reserva.abrigo.nomeLocal}</span>
+                                <span>Usuário: ${reserva.usuario.nome}</span>
+                                <span class="reserva-status">Status: ${reserva.status}</span>
+                            </div>
+                        </div>
+                        <button class="btn-delete" onclick="deleteReserva(${reserva.id})">
+                            <i class="fas fa-trash-alt"></i> Excluir
+                        </button>
+                    `;
+                    list.appendChild(item);
+                });
+            } catch (error) {
+                console.error('Erro:', error);
+                alert(error.message);
             }
-            const reservas = await response.json();
-            const list = document.getElementById('reserva-list');
-            list.innerHTML = '';
-            reservas.forEach(reserva => {
-                const item = document.createElement('li');
-                item.textContent = `Código: ${reserva.codigoReserva} - Abrigo: ${reserva.abrigo.nomeLocal} - Usuário: ${reserva.usuario.nome} - Status: ${reserva.status}`;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Excluir';
-                deleteButton.onclick = () => deleteReserva(reserva.id);
-                item.appendChild(deleteButton);
-
-                list.appendChild(item);
-            });
         }
 
         async function createReserva(event) {
             event.preventDefault();
-            const form = event.target;
-            const data = {
-                usuarioId: form.usuarioId.value,
-                abrigoId: form.abrigoId.value,
-                dataReserva: form.dataReserva.value
-            };
-            const response = await fetch('/api/reservas', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            if (response.ok) {
+            try {
+                const form = event.target;
+                const data = {
+                    usuarioId: form.usuarioId.value,
+                    abrigoId: form.abrigoId.value,
+                    dataReserva: form.dataReserva.value
+                };
+
+                const response = await fetch('/api/reservas', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao criar reserva.');
+                }
+
                 alert('Reserva criada com sucesso!');
                 form.reset();
                 fetchReservas();
-            } else {
-                alert('Erro ao criar reserva.');
+            } catch (error) {
+                console.error('Erro:', error);
+                alert(error.message);
             }
         }
 
@@ -55,14 +339,21 @@
             if (!confirm('Tem certeza que deseja excluir esta reserva?')) {
                 return;
             }
-            const response = await fetch(`/api/reservas/${id}`, {
-                method: 'DELETE'
-            });
-            if (response.ok) {
+
+            try {
+                const response = await fetch(`/api/reservas/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao excluir reserva.');
+                }
+
                 alert('Reserva excluída com sucesso!');
                 fetchReservas();
-            } else {
-                alert('Erro ao excluir reserva.');
+            } catch (error) {
+                console.error('Erro:', error);
+                alert(error.message);
             }
         }
 
@@ -74,16 +365,40 @@
     </script>
 </head>
 <body>
-    <h1>Gerenciamento de Reservas</h1>
-    <h2>Lista de Reservas</h2>
-    <ul id="reserva-list"></ul>
+    <header class="header">
+        <div class="logo">PONABRI</div>
+    </header>
 
-    <h2>Criar Reserva</h2>
-    <form id="reserva-form">
-        <label>Usuário ID: <input type="text" name="usuarioId" required></label><br>
-        <label>Abrigo ID: <input type="text" name="abrigoId" required></label><br>
-        <label>Data da Reserva: <input type="date" name="dataReserva" required></label><br>
-        <button type="submit">Criar Reserva</button>
-    </form>
+    <main class="content-container">
+        <h1>Gerenciamento de Reservas</h1>
+
+        <div class="table-container">
+            <h2>Lista de Reservas</h2>
+            <ul id="reserva-list"></ul>
+        </div>
+
+        <div class="form-container">
+            <h2>Criar Reserva</h2>
+            <form id="reserva-form">
+                <div class="form-group">
+                    <label for="usuarioId"><i class="fas fa-user"></i> Usuário ID:</label>
+                    <input type="text" id="usuarioId" name="usuarioId" required placeholder="ID do usuário">
+                </div>
+                <div class="form-group">
+                    <label for="abrigoId"><i class="fas fa-home"></i> Abrigo ID:</label>
+                    <input type="text" id="abrigoId" name="abrigoId" required placeholder="ID do abrigo">
+                </div>
+                <div class="form-group">
+                    <label for="dataReserva"><i class="fas fa-calendar"></i> Data da Reserva:</label>
+                    <input type="date" id="dataReserva" name="dataReserva" required>
+                </div>
+                <button type="submit"><i class="fas fa-plus"></i> Criar Reserva</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 PONABRI - Todos os direitos reservados</p>
+    </footer>
 </body>
 </html>
