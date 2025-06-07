@@ -6,7 +6,6 @@ import com.fiap.ponabri.entities.Abrigo;
 import com.fiap.ponabri.enums.AbrigoStatus;
 import com.fiap.ponabri.repositories.AbrigoRepository;
 import com.fiap.ponabri.repositories.ReservaRepository;
-import com.fiap.ponabri.services.AbrigoAIService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +22,6 @@ public class AbrigosController {
     private AbrigoRepository abrigoRepository;
 
     @Autowired
-    private AbrigoAIService abrigoAIService;
-
-    @Autowired
     private ReservaRepository reservaRepository;
 
     @PostMapping
@@ -40,8 +36,6 @@ public class AbrigosController {
                 .vagasCarrosDisponiveis(dto.getCapacidadeCarros())
                 .contatoResponsavel(dto.getContatoResponsavel())
                 .descricao(dto.getDescricao())
-                .status(AbrigoStatus.ATIVO)
-                .categoriaSugeridaAI(abrigoAIService.sugerirCategoria(dto.getDescricao()))
                 .build();
 
         Abrigo salvo = abrigoRepository.save(abrigo);
@@ -74,11 +68,10 @@ public class AbrigosController {
                     abrigo.setRegiao(dto.getRegiao());
                     abrigo.setCapacidadePessoas(dto.getCapacidadePessoas());
                     abrigo.setVagasPessoasDisponiveis(abrigo.getCapacidadePessoas());
-                    abrigo.setCapacidadeCarros(abrigo.getCapacidadeCarros());
-                    abrigo.setVagasCarrosDisponiveis(abrigo.getCapacidadeCarros());
+                    abrigo.setCapacidadeCarros(dto.getCapacidadeCarros());
+                    abrigo.setVagasCarrosDisponiveis(dto.getCapacidadeCarros());
                     abrigo.setContatoResponsavel(dto.getContatoResponsavel());
                     abrigo.setDescricao(dto.getDescricao());
-                    abrigo.setCategoriaSugeridaAI(abrigoAIService.sugerirCategoria(dto.getDescricao()));
                     Abrigo atualizado = abrigoRepository.save(abrigo);
                     return ResponseEntity.ok(toResponseDto(atualizado));
                 })
@@ -90,9 +83,8 @@ public class AbrigosController {
         if (!abrigoRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        boolean hasReservas = reservaRepository.findAll().stream()
-                .anyMatch(reserva -> reserva.getAbrigo() != null && reserva.getAbrigo().getId().equals(id));
-        if (hasReservas) {
+        long reservasCount = reservaRepository.countByAbrigoId(id);
+        if (reservasCount > 0) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         abrigoRepository.deleteById(id);

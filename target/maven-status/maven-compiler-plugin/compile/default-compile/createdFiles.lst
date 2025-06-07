@@ -18,7 +18,6 @@ com\fiap\ponabri\repositories\AbrigoRepository.class
 com\fiap\ponabri\enums\AbrigoStatus.class
 com\fiap\ponabri\controllers\AbrigosController.class
 com\fiap\ponabri\entities\Usuario$UsuarioBuilder.class
-com\fiap\ponabri\services\AbrigoAIService.class
 com\fiap\ponabri\dto\AbrigoCreateDto.class
 com\fiap\ponabri\controllers\HomeController.class
 com\fiap\ponabri\entities\Abrigo.class

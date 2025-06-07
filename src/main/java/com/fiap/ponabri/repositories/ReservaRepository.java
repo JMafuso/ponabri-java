@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     Optional<Reserva> findByCodigoReserva(String codigoReserva);
+
+    long countByAbrigoId(Long abrigoId);
 }
