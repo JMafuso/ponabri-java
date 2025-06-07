@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController; // Use apenas @RestController
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController // Mantenha apenas @RestController para controladores REST
 @RequestMapping("/api/reservas")
@@ -47,6 +49,15 @@ public class ReservasController {
     @GetMapping("/reservas")
     public String reservasPage() {
         return "reservas"; // Assume que "reservas" é o nome de um template Thymeleaf
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReservaResponseDto>> listarReservas() {
+        List<Reserva> reservas = reservaRepository.findAll();
+        List<ReservaResponseDto> dtos = reservas.stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping

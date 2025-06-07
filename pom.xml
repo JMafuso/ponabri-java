@@ -116,6 +116,10 @@
         -->
 
     </dependencies>
+
+    <!-- Spring AI OpenAI Starter Dependency -->
+    <!-- Moved Spring AI dependency inside the main dependencies block -->
+    
     <build>
         <plugins>
             <plugin>

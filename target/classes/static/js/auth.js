@@ -11,7 +11,8 @@ async function login(event) {
 
     if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token);
+        console.log('Login successful:', data); // Log login success and data
+        localStorage.setItem('jwtToken', data.token);
         window.location.href = '/home';
     } else {
         alert('Falha no login. Verifique suas credenciais.');

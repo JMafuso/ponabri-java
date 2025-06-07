@@ -36,9 +36,19 @@ public class AuthFlowIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private com.fiap.ponabri.repositories.ReservaRepository reservaRepository;
+
     @BeforeEach
     public void setup() {
-        usuarioRepository.deleteAll();
+        // Instead of deleting all users, only delete test data created by tests
+        // For example, delete reservas and users with specific test email pattern
+        reservaRepository.deleteAll();
+
+        // Delete only users created for tests (e.g., emails containing "teste@fiap.com" or "testuser")
+        usuarioRepository.findAll().stream()
+            .filter(u -> u.getEmail().contains("teste@fiap.com") || u.getEmail().contains("testuser"))
+            .forEach(u -> usuarioRepository.delete(u));
     }
 
     @Test

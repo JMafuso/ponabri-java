@@ -5,19 +5,18 @@ import com.fiap.ponabri.dto.AbrigoResponseDto;
 import com.fiap.ponabri.entities.Abrigo;
 import com.fiap.ponabri.enums.AbrigoStatus;
 import com.fiap.ponabri.repositories.AbrigoRepository;
+import com.fiap.ponabri.repositories.ReservaRepository;
 import com.fiap.ponabri.services.AbrigoAIService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Removed org.springframework.stereotype.Controller and org.springframework.web.bind.annotation.GetMapping
-// as @RestController already includes @Controller features and GetMapping is handled by @RequestMapping.
-
-@RestController // Keep only @RestController for REST APIs
-@RequestMapping("/api/abrigos") // This is the base path for all endpoints in this controller
+@RestController
+@RequestMapping("/api/abrigos")
 public class AbrigosController {
 
     @Autowired
@@ -26,14 +25,8 @@ public class AbrigosController {
     @Autowired
     private AbrigoAIService abrigoAIService;
 
-    // Remove or comment out this method if you are building a pure REST API backend
-    // and do not intend to serve Thymeleaf views from this controller.
-    /*
-    @GetMapping("/abrigos") // This would map to /api/abrigos/abrigos
-    public String abrigosPage() {
-        return "abrigos";
-    }
-    */
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @PostMapping
     public ResponseEntity<AbrigoResponseDto> criarAbrigo(@Valid @RequestBody AbrigoCreateDto dto) {
@@ -56,7 +49,7 @@ public class AbrigosController {
         return ResponseEntity.ok(toResponseDto(salvo));
     }
 
-    @GetMapping // This method maps to GET /api/abrigos
+    @GetMapping
     public ResponseEntity<List<AbrigoResponseDto>> listarAbrigos() {
         List<Abrigo> abrigos = abrigoRepository.findAll();
         List<AbrigoResponseDto> dtos = abrigos.stream()
@@ -65,14 +58,14 @@ public class AbrigosController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/{id}") // This method maps to GET /api/abrigos/{id}
+    @GetMapping("/{id}")
     public ResponseEntity<AbrigoResponseDto> obterAbrigo(@PathVariable Long id) {
         return abrigoRepository.findById(id)
                 .map(abrigo -> ResponseEntity.ok(toResponseDto(abrigo)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}") // This method maps to PUT /api/abrigos/{id}
+    @PutMapping("/{id}")
     public ResponseEntity<AbrigoResponseDto> atualizarAbrigo(@PathVariable Long id, @Valid @RequestBody AbrigoCreateDto dto) {
         return abrigoRepository.findById(id)
                 .map(abrigo -> {
@@ -80,9 +73,9 @@ public class AbrigosController {
                     abrigo.setEndereco(dto.getEndereco());
                     abrigo.setRegiao(dto.getRegiao());
                     abrigo.setCapacidadePessoas(dto.getCapacidadePessoas());
-                    abrigo.setVagasPessoasDisponiveis(abrigo.getCapacidadePessoas()); // reset vagas
+                    abrigo.setVagasPessoasDisponiveis(abrigo.getCapacidadePessoas());
                     abrigo.setCapacidadeCarros(abrigo.getCapacidadeCarros());
-                    abrigo.setVagasCarrosDisponiveis(abrigo.getCapacidadeCarros()); // reset vagas
+                    abrigo.setVagasCarrosDisponiveis(abrigo.getCapacidadeCarros());
                     abrigo.setContatoResponsavel(dto.getContatoResponsavel());
                     abrigo.setDescricao(dto.getDescricao());
                     abrigo.setCategoriaSugeridaAI(abrigoAIService.sugerirCategoria(dto.getDescricao()));
@@ -92,13 +85,18 @@ public class AbrigosController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}") // This method maps to DELETE /api/abrigos/{id}
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAbrigo(@PathVariable Long id) {
-        if (abrigoRepository.existsById(id)) {
-            abrigoRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
+        if (!abrigoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        boolean hasReservas = reservaRepository.findAll().stream()
+                .anyMatch(reserva -> reserva.getAbrigo() != null && reserva.getAbrigo().getId().equals(id));
+        if (hasReservas) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        abrigoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     private AbrigoResponseDto toResponseDto(Abrigo abrigo) {
