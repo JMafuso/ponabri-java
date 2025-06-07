@@ -275,79 +275,6 @@
             max-width: 90%;
         }
 
-        @media (max-width: 768px) {
-            .content-container {
-                padding: 1rem;
-                margin-top: 70px;
-            }
-
-            .dashboard-container {
-                padding: 1.5rem;
-                margin: 0 1rem;
-            }
-
-            h1 {
-                font-size: 2.2rem;
-                margin-bottom: 0.8rem;
-            }
-
-            h2 {
-                font-size: 1.8rem;
-                margin: 2rem 0 1.2rem;
-            }
-
-            .welcome-message {
-                font-size: 1.1rem;
-                margin-bottom: 2rem;
-                padding: 0 1rem;
-            }
-
-            .nav-menu {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                padding: 0.5rem;
-            }
-
-            .nav-link {
-                padding: 2rem 1.5rem;
-                min-height: 240px;
-            }
-
-            .nav-link i {
-                font-size: 2.5rem;
-                margin-bottom: 1.2rem;
-            }
-
-            .nav-link span {
-                font-size: 1.2rem;
-                margin: 0.6rem 0;
-            }
-
-            .nav-description {
-                font-size: 1rem;
-            }
-
-            .message-box {
-                margin: 1rem auto;
-                padding: 1rem;
-                font-size: 1rem;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .content-container {
-                max-width: 90%;
-            }
-
-            .dashboard-container {
-                padding: 2.5rem;
-            }
-
-            .nav-menu {
-                grid-template-columns: repeat(2, 1fr);
-                max-width: 700px;
-            }
-        }
     </style>
     <script src="/js/authInterceptor.js"></script>
 </head>
@@ -360,9 +287,6 @@
         <div class="dashboard-container">
             <h1>Dashboard Ponabri</h1>
             <p class="welcome-message">Bem-vindo(a) ao seu painel! Aqui você pode acessar os dados da aplicação.</p>
-
-            <div id="loadingMessage" class="message-box info" style="display: none;">Carregando dados...</div>
-            <div id="errorMessage" class="message-box error" style="display: none;"></div>
 
             <div class="data-section">
                 <h2>Menu de Navegação</h2>
@@ -381,6 +305,22 @@
                             <p class="nav-description">Gerencie as reservas dos abrigos</p>
                         </a>
                     </li>
+                    <li>
+                        <button onclick="sendMessage()" class="nav-link" style="border:none; cursor:pointer;">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Enviar Mensagem RabbitMQ</span>
+                            <p class="nav-description">Clique para enviar uma mensagem de teste para RabbitMQ</p>
+                        </button>
+                    </li>
+                    <li>
+                        <div class="nav-link" style="cursor: default;">
+                            <i class="fas fa-robot"></i>
+                            <span>Interagir com Spring AI</span>
+                            <input type="text" id="aiQuestion" placeholder="Digite sua pergunta para a IA" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"/>
+                            <button onclick="askAi()" style="margin-top: 0.5rem; width: 100%;">Perguntar à IA</button>
+                            <p class="nav-description">Faça uma pergunta e receba a resposta da IA</p>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -391,42 +331,18 @@
     </footer>
 
     <script>
-        window.onload = function() {
-            const loadingMessage = document.getElementById('loadingMessage');
-            const errorMessage = document.getElementById('errorMessage');
+        async function sendMessage() {
+            const response = await fetch('/api/send-message', { method: 'POST' });
+            const text = await response.text();
+            alert(text);
+        }
 
-            loadingMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-
-            fetch('/api/abrigos')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao buscar abrigos');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    loadingMessage.style.display = 'none';
-                    const navMenu = document.querySelector('.nav-menu');
-
-                    data.forEach(abrigo => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <a href="/abrigos/${abrigo.id}" class="nav-link">
-                                <i class="fas fa-home"></i>
-                                <span>${abrigo.nomeLocal}</span>
-                                <p class="nav-description">${abrigo.descricao || ''}</p>
-                            </a>
-                        `;
-                        navMenu.appendChild(li);
-                    });
-                })
-                .catch(error => {
-                    loadingMessage.style.display = 'none';
-                    errorMessage.style.display = 'block';
-                    errorMessage.textContent = error.message;
-                });
-        };
+        async function askAi() {
+            const question = document.getElementById('aiQuestion').value;
+            const response = await fetch('/api/ask-ai?question=' + encodeURIComponent(question));
+            const text = await response.text();
+            alert(text);
+        }
     </script>
 </body>
 </html>
