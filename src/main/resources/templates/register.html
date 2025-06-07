@@ -1,22 +1,208 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Registro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - PONABRI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --cor-principal: #FF8C00;
+            --cor-secundaria: #FFFACD;
+            --cor-terciaria: #FFA500;
+            --cor-texto-claro: #333333;
+            --cor-vermelho-acao: #DC3545;
+            --sombra-suave: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transicao-padrao: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--cor-texto-claro);
+            background: linear-gradient(135deg, #FFFFF0 0%, #FFFACD 25%, #FFDDAA 50%, #FFC070 75%, #FFA500 100%);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--cor-principal);
+            transition: var(--transicao-padrao);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(12px);
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem;
+        }
+
+        h2 {
+            color: var(--cor-principal);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--cor-texto-claro);
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transicao-padrao);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--cor-principal);
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--cor-principal);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicao-padrao);
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: var(--cor-terciaria);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--cor-texto-claro);
+        }
+
+        .login-link a {
+            color: var(--cor-principal);
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--transicao-padrao);
+        }
+
+        .login-link a:hover {
+            color: var(--cor-terciaria);
+            text-decoration: underline;
+        }
+
+        .footer {
+            background-color: var(--cor-principal);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .register-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<h2>Registro</h2>
-<form id="register-form" onsubmit="register(event)">
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required><br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br>
-    <label for="senha">Senha:</label>
-    <input type="password" id="senha" name="senha" required><br>
-    <label for="confirmarSenha">Confirmar Senha:</label>
-    <input type="password" id="confirmarSenha" name="confirmarSenha" required><br>
-    <button type="submit">Registrar</button>
-</form>
-<p>Já tem uma conta? <a th:href="@{/login}">Faça login</a></p>
-<script src="/js/auth.js"></script>
+    <header class="header">
+        <div class="logo">PONABRI</div>
+    </header>
+
+    <main class="register-container">
+        <h2>Registro</h2>
+        <form id="register-form" onsubmit="register(event)">
+            <div class="form-group">
+                <label for="nome"><i class="fas fa-user"></i> Nome:</label>
+                <input type="text" id="nome" name="nome" required placeholder="Seu nome completo">
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                <input type="email" id="email" name="email" required placeholder="Seu email">
+            </div>
+            <div class="form-group">
+                <label for="senha"><i class="fas fa-lock"></i> Senha:</label>
+                <input type="password" id="senha" name="senha" required placeholder="Sua senha">
+            </div>
+            <div class="form-group">
+                <label for="confirmarSenha"><i class="fas fa-lock"></i> Confirmar Senha:</label>
+                <input type="password" id="confirmarSenha" name="confirmarSenha" required placeholder="Confirme sua senha">
+            </div>
+            <button type="submit"><i class="fas fa-user-plus"></i> Registrar</button>
+        </form>
+        <p class="login-link">Já tem uma conta? <a th:href="@{/login}">Faça login</a></p>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 PONABRI - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="/js/auth.js"></script>
 </body>
 </html>
