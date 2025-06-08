@@ -17,11 +17,11 @@
 
 ---
 
-# Ponabri - Plataforma de Gerenciamento de Abrigos
+# Ponabri - Plataforma de Gerenciamento de Abrigos Comunitários Temporários
 
-## Descrição do Projeto
+## Visão Geral
 
-Ponabri é uma plataforma web para gerenciar abrigos comunitários temporários durante eventos extremos, focada em segurança e eficiência. A aplicação facilita o cadastro, reserva e gerenciamento de abrigos, além de fornecer comunicação assíncrona e suporte via inteligência artificial para auxiliar os usuários.
+Ponabri é uma plataforma web desenvolvida em Java com Spring Boot, destinada ao gerenciamento eficiente e seguro de abrigos comunitários temporários durante eventos extremos. A aplicação oferece funcionalidades para cadastro, reserva e administração de abrigos, além de comunicação assíncrona via RabbitMQ e suporte básico por inteligência artificial para auxiliar os usuários.
 
 ## Tecnologias Utilizadas
 
@@ -29,37 +29,39 @@ Ponabri é uma plataforma web para gerenciar abrigos comunitários temporários 
 - Spring Boot 3.3.0
 - Maven
 - Spring Data JPA
-- Oracle Database
-- Spring Security com JWT
-- RabbitMQ
-- Spring AI (integração simplificada)
-- Lombok
-- Spring Validation
-- Thymeleaf
+- Banco de Dados Oracle
+- Spring Security com JWT para autenticação e autorização
+- RabbitMQ para comunicação assíncrona
+- Spring AI para integração com inteligência artificial
+- Lombok para redução de boilerplate
+- Spring Validation para validação de dados
+- Thymeleaf para templates HTML
 
 ## Funcionalidades Principais
 
-- Fluxo de autenticação e autorização via JWT
-- CRUD completo para Abrigos e Reservas
-- Criação e gerenciamento de Avisos
-- Geração de código para dispositivos IoT
+- Autenticação e autorização via JWT
+- CRUD completo para gerenciamento de abrigos e reservas
+- Criação e gerenciamento de avisos relacionados aos abrigos
+- Geração de códigos para dispositivos IoT
 - Comunicação assíncrona com RabbitMQ (produtor e consumidor)
-- Interação com IA para respostas simples e hardcoded
+- Interação com inteligência artificial para respostas simples e hardcoded
+- Validação de dados e tratamento global de exceções
+- Testes unitários e de integração para garantir qualidade
 
 ## Estrutura do Projeto
 
-- `config`: Configurações do projeto, incluindo segurança, RabbitMQ e AI
-- `controllers`: Controladores REST e MVC para rotas da aplicação
+- `config`: Configurações do sistema, incluindo segurança, RabbitMQ, internacionalização e integração com AI
+- `controllers`: Controladores REST e MVC que expõem as rotas da aplicação
 - `dto`: Objetos de transferência de dados para comunicação entre camadas
-- `entities`: Entidades JPA que representam tabelas do banco de dados
-- `enums`: Enumerações usadas no projeto
+- `entities`: Entidades JPA que representam as tabelas do banco de dados
+- `enums`: Enumerações utilizadas no projeto
 - `exception`: Tratamento global de exceções
 - `repositories`: Interfaces JPA para acesso a dados
-- `security`: Implementação de segurança JWT e filtros
+- `security`: Implementação de segurança JWT, filtros e utilitários
 - `service` e `services`: Lógica de negócio e serviços auxiliares
-- `consumers`: Consumidores RabbitMQ
-- `src/main/resources/templates/`: Templates Thymeleaf para views
-- `src/main/resources/static/`: Arquivos estáticos (JS, CSS, imagens)
+- `consumers`: Consumidores para filas RabbitMQ
+- `src/main/resources/templates/`: Templates Thymeleaf para as views
+- `src/main/resources/static/`: Arquivos estáticos (JavaScript, CSS, imagens)
 
 ## Como Rodar o Projeto
 
@@ -69,7 +71,7 @@ Ponabri é uma plataforma web para gerenciar abrigos comunitários temporários 
 - Maven instalado
 - Banco de dados Oracle configurado e acessível
 - RabbitMQ rodando localmente ou via Docker
-- Conta e chave API para Spring AI (mesmo que dummy para testes)
+- Conta e chave API para Spring AI
 
 ### Passos para Compilar e Iniciar
 
@@ -88,3 +90,17 @@ mvn spring-boot:run
 
 - Login: `http://localhost:8080/login`
 - Dashboard: `http://localhost:8080/home`
+
+## Endpoints Principais
+
+- `/api/auth/register` - Registro de usuários
+- `/api/auth/login` - Autenticação e obtenção de token JWT
+- `/api/abrigos` - CRUD de abrigos
+- `/api/reservas` - CRUD de reservas
+- `/api/usuarios` - Gerenciamento de usuários
+- `/api/ai` - Interação com inteligência artificial
+- `/api/rabbitmq` - Comunicação via RabbitMQ
+
+## Testes
+
+O projeto inclui testes unitários e de integração localizados em `src/test/java/com/fiap/ponabri/`, garantindo a qualidade e estabilidade das funcionalidades.

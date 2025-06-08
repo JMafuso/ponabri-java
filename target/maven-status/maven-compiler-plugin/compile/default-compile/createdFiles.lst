@@ -8,6 +8,7 @@ com\fiap\ponabri\config\RoleDocumentation.class
 com\fiap\ponabri\dto\UsuarioRegisterDto.class
 com\fiap\ponabri\entities\Aviso$AvisoBuilder.class
 com\fiap\ponabri\entities\Aviso.class
+com\fiap\ponabri\config\I18nConfig.class
 com\fiap\ponabri\dto\AbrigoInfoDto.class
 com\fiap\ponabri\controllers\AiController.class
 com\fiap\ponabri\security\JwtTokenProvider.class

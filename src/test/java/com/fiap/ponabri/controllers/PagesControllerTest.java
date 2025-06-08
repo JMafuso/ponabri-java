@@ -27,14 +27,6 @@ public class PagesControllerTest {
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    // Removed testReservasPage since /reservas is handled by ReservasController
-    // @Test
-    // public void testReservasPage() throws Exception {
-    //     mockMvc.perform(get("/reservas"))
-    //             .andExpect(status().isOk())
-    //             .andExpect(view().name("reservas"));
-    // }
-
     @Test
     public void testUsuariosPage() throws Exception {
         mockMvc.perform(get("/usuariosPage"))
