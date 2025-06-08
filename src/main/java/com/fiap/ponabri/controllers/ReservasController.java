@@ -1,3 +1,4 @@
+
 package com.fiap.ponabri.controllers;
 
 import com.fiap.ponabri.dto.ReservaCreateDto;
@@ -58,7 +59,6 @@ public class ReservasController {
 
     @PostMapping
     public ResponseEntity<?> criarReserva(@Valid @RequestBody ReservaCreateDto dto) {
-        System.out.println("Received ReservaCreateDto: " + dto);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
