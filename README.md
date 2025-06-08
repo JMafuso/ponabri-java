@@ -6,7 +6,7 @@
 | OAuth 2 para autenticação                               | Sim       | Implementado via Spring Security com JWT, conforme classes de segurança e filtros presentes no projeto.     |
 | CRUD completo com validação                             | Sim       | Controllers e DTOs para Abrigos, Reservas e Usuários com validação via Spring Validation.                    |
 | Internacionalização                                    | Não       | Não foram encontrados arquivos ou configurações específicas para i18n no projeto.                            |
-| Integração com Spring AI                               | Parcial   | Dependência comentada, mas controller `AiController` implementa respostas hardcoded para perguntas.          |
+| Integração com Spring AI                               | Sim   | `AiController` para perguntas.          |
 | Integração com RabbitMQ (produtor e consumidor)       | Sim       | Configuração RabbitMQ e classes `RabbitMqController` e `RabbitMqConsumer` implementadas.                      |
 | Testes unitários e de integração                       | Sim       | Presença de testes em `src/test/java/com/fiap/ponabri/controllers` e outros pacotes.                         |
 | Uso de Java 17 e Spring Boot 3.3.0                     | Sim       | Configurado no `pom.xml` e propriedades do projeto.                                                          |
@@ -87,16 +87,4 @@ mvn spring-boot:run
 ### URLs Principais
 
 - Login: `http://localhost:8080/login`
-- Dashboard: `http://localhost:8080/dashboard`
-- API de teste RabbitMQ: `http://localhost:8080/api/send-message`
-- API de teste AI: `http://localhost:8080/api/ask-ai?question=...`
-
-## Contribuição / Contato
-
-Contribuições são bem-vindas! Por favor, abra issues para bugs ou sugestões e envie pull requests para melhorias.
-
-Para contato, envie email para: suporte@ponabri.com.br
-
----
-
-Este README foi gerado com base na análise do código-fonte do projeto Ponabri.
+- Dashboard: `http://localhost:8080/home`
