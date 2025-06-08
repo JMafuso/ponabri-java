@@ -3,4 +3,3 @@ com\fiap\ponabri\controllers\PagesControllerTest.class
 com\fiap\ponabri\controllers\AuthFlowIntegrationTest.class
 com\fiap\ponabri\controllers\AuthControllerTest.class
 com\fiap\ponabri\controllers\FunctionalTests.class
-com\fiap\ponabri\services\AbrigoAIServiceTest.class
