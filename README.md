@@ -23,8 +23,11 @@
 
 Ponabri é uma plataforma web desenvolvida em Java com Spring Boot, destinada ao gerenciamento eficiente e seguro de abrigos comunitários temporários durante eventos extremos. A aplicação oferece funcionalidades para cadastro, reserva e administração de abrigos, além de comunicação assíncrona via RabbitMQ e suporte básico por inteligência artificial para auxiliar os usuários.
 
-## Apresentação
+## Apresentação do Projeto
 https://www.youtube.com/watch?v=S378m7G2kKk
+
+## Apresentação Pitch
+https://youtu.be/Ne9nenbZS9E
 
 ## Tecnologias Utilizadas
 
