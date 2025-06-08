@@ -5,7 +5,6 @@
 | Aplicação Web Spring MVC + Thymeleaf                   | Sim       | O projeto possui templates Thymeleaf em `src/main/resources/templates` e controllers para rotas web.         |
 | OAuth 2 para autenticação                               | Sim       | Implementado via Spring Security com JWT, conforme classes de segurança e filtros presentes no projeto.     |
 | CRUD completo com validação                             | Sim       | Controllers e DTOs para Abrigos, Reservas e Usuários com validação via Spring Validation.                    |
-| Internacionalização                                    | Não       | Não foram encontrados arquivos ou configurações específicas para i18n no projeto.                            |
 | Integração com Spring AI                               | Sim   | `AiController` para perguntas.          |
 | Integração com RabbitMQ (produtor e consumidor)       | Sim       | Configuração RabbitMQ e classes `RabbitMqController` e `RabbitMqConsumer` implementadas.                      |
 | Testes unitários e de integração                       | Sim       | Presença de testes em `src/test/java/com/fiap/ponabri/controllers` e outros pacotes.                         |
