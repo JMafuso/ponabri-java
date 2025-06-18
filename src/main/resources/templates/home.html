@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Ponabri</title>
+    <title th:text="#{home.title}">Dashboard - Ponabri</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style th:replace="fragments/header :: header-styles"></style>
     <style>
         :root {
             --cor-principal: #FF8C00;
@@ -40,34 +41,6 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-
-        .header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
-            top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--cor-principal);
-            transition: var(--transicao-padrao);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
         }
 
         .content-container {
@@ -276,49 +249,46 @@
         }
 
     </style>
-    <script src="/js/authInterceptor.js"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">PONABRI</div>
-    </header>
+    <header th:replace="fragments/header :: header"></header>
 
     <main class="content-container">
         <div class="dashboard-container">
-            <h1>Dashboard Ponabri</h1>
-            <p class="welcome-message">Bem-vindo(a) ao seu painel! Aqui você pode acessar os dados da aplicação.</p>
+            <h1 th:text="#{home.title}">Dashboard Ponabri</h1>
+            <p class="welcome-message" th:text="#{home.welcome}">Bem-vindo(a) ao seu painel! Aqui você pode acessar os dados da aplicação.</p>
 
             <div class="data-section">
-                <h2>Menu de Navegação</h2>
+                <h2 th:text="#{home.navigation.menu}">Menu de Navegação</h2>
                 <ul class="nav-menu">
                     <li>
                         <a href="/abrigos" class="nav-link">
                             <i class="fas fa-home"></i>
-                            <span>Gerenciar Abrigos</span>
-                            <p class="nav-description">Visualize, adicione e gerencie os abrigos disponíveis</p>
+                            <span th:text="#{home.navigation.shelters}">Gerenciar Abrigos</span>
+                            <p class="nav-description" th:text="#{home.navigation.shelters.description}">Visualize, adicione e gerencie os abrigos disponíveis</p>
                         </a>
                     </li>
                     <li>
                         <a href="/reservas" class="nav-link">
                             <i class="fas fa-calendar-alt"></i>
-                            <span>Gerenciar Reservas</span>
-                            <p class="nav-description">Gerencie as reservas dos abrigos</p>
+                            <span th:text="#{home.navigation.reservations}">Gerenciar Reservas</span>
+                            <p class="nav-description" th:text="#{home.navigation.reservations.description}">Gerencie as reservas dos abrigos</p>
                         </a>
                     </li>
                     <li>
                         <button onclick="sendMessage()" class="nav-link" style="border:none; cursor:pointer;">
                             <i class="fas fa-paper-plane"></i>
-                            <span>Enviar Mensagem RabbitMQ</span>
-                            <p class="nav-description">Clique para enviar uma mensagem de teste para RabbitMQ</p>
+                            <span th:text="#{home.navigation.rabbitmq}">Enviar Mensagem RabbitMQ</span>
+                            <p class="nav-description" th:text="#{home.navigation.rabbitmq.description}">Clique para enviar uma mensagem de teste para RabbitMQ</p>
                         </button>
                     </li>
                     <li>
                         <div class="nav-link" style="cursor: default;">
                             <i class="fas fa-robot"></i>
-                            <span>Interagir com Spring AI</span>
-                            <input type="text" id="aiQuestion" placeholder="Digite sua pergunta para a IA" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"/>
-                            <button onclick="askAi()" style="margin-top: 0.5rem; width: 100%;">Perguntar à IA</button>
-                            <p class="nav-description">Faça uma pergunta e receba a resposta da IA</p>
+                            <span th:text="#{home.navigation.ai}">Interagir com Spring AI</span>
+                            <input type="text" id="aiQuestion" th:placeholder="#{home.navigation.ai.placeholder}" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"/>
+                            <button onclick="askAi()" style="margin-top: 0.5rem; width: 100%;" th:text="#{home.navigation.ai.button}">Perguntar à IA</button>
+                            <p class="nav-description" th:text="#{home.navigation.ai.description}">Faça uma pergunta e receba a resposta da IA</p>
                         </div>
                     </li>
                 </ul>
@@ -327,9 +297,11 @@
     </main>
 
     <footer class="footer">
-        <p>© 2025 PONABRI - Todos os direitos reservados</p>
+        <p th:text="#{footer.copyright}">© 2025 PONABRI - Todos os direitos reservados</p>
     </footer>
 
+    <script src="/js/authInterceptor.js"></script>
+    <script th:replace="fragments/header :: i18n-script"></script>
     <script>
         async function sendMessage() {
             const response = await fetch('/api/send-message', { method: 'POST' });

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Reservas - PONABRI</title>
+    <title th:text="#{reservations.title}">Gerenciamento de Reservas - PONABRI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style th:replace="fragments/header :: header-styles"></style>
     <style>
         :root {
             --cor-principal: #FF8C00;
@@ -39,32 +40,6 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-
-        .header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
-            top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--cor-principal);
-            transition: var(--transicao-padrao);
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
         }
 
         .content-container {
@@ -190,7 +165,7 @@
             font-weight: 500;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 0.8rem;
             border: 2px solid #ddd;
@@ -199,7 +174,7 @@
             transition: var(--transicao-padrao);
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--cor-principal);
             box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
@@ -263,10 +238,50 @@
             }
         }
     </style>
-    <script src="/js/authInterceptor.js"></script>
-    <script>
-        let currentEditId = null;
+</head>
+<body>
+    <header th:replace="fragments/header :: header"></header>
 
+    <main class="content-container">
+        <h1 th:text="#{reservations.title}">Gerenciamento de Reservas</h1>
+
+        <div class="table-container">
+            <h2>Lista de Reservas</h2>
+            <ul id="reserva-list"></ul>
+        </div>
+
+        <div class="form-container">
+            <h2 th:text="#{reservations.add.new}">Criar Reserva</h2>
+            <form id="reserva-form">
+                <div class="form-group">
+                    <label for="abrigoSelect"><i class="fas fa-home"></i> <span th:text="#{reservations.form.shelter}">Abrigo:</span></label>
+                    <select id="abrigoSelect" name="abrigoId" required>
+                        <option value="" disabled selected th:text="#{reservations.form.shelter}">Selecione um abrigo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quantidadePessoas"><i class="fas fa-users"></i> <span th:text="#{reservations.form.shelter}">Quantidade de Pessoas:</span></label>
+                    <input type="number" id="quantidadePessoas" name="quantidadePessoas" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="usouVagaCarro"><i class="fas fa-car"></i> <span th:text="#{reservations.form.shelter}">Usou Vaga de Carro:</span></label>
+                    <select id="usouVagaCarro" name="usouVagaCarro" required>
+                        <option value="false" selected>Não</option>
+                        <option value="true">Sim</option>
+                    </select>
+                </div>
+                <button type="submit"><i class="fas fa-plus"></i> <span th:text="#{reservations.add.new}">Criar Reserva</span></button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p th:text="#{footer.copyright}">© 2025 PONABRI - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="/js/authInterceptor.js"></script>
+    <script th:replace="fragments/header :: i18n-script"></script>
+    <script>
         async function fetchReservas() {
             try {
                 const response = await fetch('/api/reservas');
@@ -281,7 +296,7 @@
                     list.innerHTML = '<li style="text-align: center; color: #666;">Nenhuma reserva cadastrada.</li>';
                     return;
                 }
-
+            
                 reservas.forEach(reserva => {
                     const item = document.createElement('li');
                     item.innerHTML = `
@@ -295,7 +310,7 @@
                             </div>
                         </div>
                         <button class="btn-delete" onclick="deleteReserva(${reserva.id})">
-                            <i class="fas fa-trash-alt"></i> Excluir
+                            <i class="fas fa-trash-alt"></i> <span th:text="#{button.delete}">Excluir</span>
                         </button>
                     `;
                     list.appendChild(item);
@@ -308,29 +323,27 @@
 
         async function createReserva(event) {
             event.preventDefault();
-            try {
-                const form = event.target;
-                const data = {
-                    usuarioId: form.usuarioId.value,
-                    abrigoId: form.abrigoId.value,
-                    dataReserva: form.dataReserva.value
-                };
+            const form = event.target;
+            const data = {
+                abrigoId: parseInt(form.abrigoId.value),
+                quantidadePessoas: parseInt(form.quantidadePessoas.value),
+                usouVagaCarro: form.usouVagaCarro.value === 'true'
+            };
 
+            try {
                 const response = await fetch('/api/reservas', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(data)
                 });
-
                 if (!response.ok) {
-                    throw new Error('Erro ao criar reserva.');
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Erro ao criar reserva');
                 }
-
                 alert('Reserva criada com sucesso!');
                 form.reset();
                 fetchReservas();
             } catch (error) {
-                console.error('Erro:', error);
                 alert(error.message);
             }
         }
@@ -382,75 +395,6 @@
                 alert(error.message);
             }
         }
-
-        async function createReserva(event) {
-            event.preventDefault();
-            const form = event.target;
-            const data = {
-                abrigoId: parseInt(form.abrigoId.value),
-                quantidadePessoas: parseInt(form.quantidadePessoas.value),
-                usouVagaCarro: form.usouVagaCarro.value === 'true'
-            };
-
-            try {
-                const response = await fetch('/api/reservas', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data)
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Erro ao criar reserva');
-                }
-                alert('Reserva criada com sucesso!');
-                form.reset();
-                fetchReservas();
-            } catch (error) {
-                alert(error.message);
-            }
-        }
     </script>
-</head>
-<body>
-    <header class="header">
-        <div class="logo">PONABRI</div>
-    </header>
-
-    <main class="content-container">
-        <h1>Gerenciamento de Reservas</h1>
-
-        <div class="table-container">
-            <h2>Lista de Reservas</h2>
-            <ul id="reserva-list"></ul>
-        </div>
-
-        <div class="form-container">
-            <h2>Criar Reserva</h2>
-            <form id="reserva-form">
-                <div class="form-group">
-                    <label for="abrigoSelect"><i class="fas fa-home"></i> Abrigo:</label>
-                    <select id="abrigoSelect" name="abrigoId" required>
-                        <option value="" disabled selected>Selecione um abrigo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="quantidadePessoas"><i class="fas fa-users"></i> Quantidade de Pessoas:</label>
-                    <input type="number" id="quantidadePessoas" name="quantidadePessoas" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="usouVagaCarro"><i class="fas fa-car"></i> Usou Vaga de Carro:</label>
-                    <select id="usouVagaCarro" name="usouVagaCarro" required>
-                        <option value="false" selected>Não</option>
-                        <option value="true">Sim</option>
-                    </select>
-                </div>
-                <button type="submit"><i class="fas fa-plus"></i> Criar Reserva</button>
-            </form>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <p>© 2025 PONABRI - Todos os direitos reservados</p>
-    </footer>
 </body>
 </html>

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - PONABRI</title>
+    <title th:text="#{register.title}">Registro - PONABRI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style th:replace="fragments/header :: header-styles"></style>
     <style>
         :root {
             --cor-principal: #FF8C00;
@@ -41,29 +42,6 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--cor-principal);
-            transition: var(--transicao-padrao);
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
         }
 
         .register-container {
@@ -171,38 +149,40 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">PONABRI</div>
-    </header>
+    <header th:replace="fragments/header :: header"></header>
 
     <main class="register-container">
-        <h2>Registro</h2>
+        <h2 th:text="#{register.title}">Registro</h2>
         <form id="register-form" onsubmit="register(event)">
             <div class="form-group">
-                <label for="nome"><i class="fas fa-user"></i> Nome:</label>
-                <input type="text" id="nome" name="nome" required placeholder="Seu nome completo">
+                <label for="nome"><i class="fas fa-user"></i> <span th:text="#{register.name}">Nome:</span></label>
+                <input type="text" id="nome" name="nome" required th:placeholder="#{register.name.placeholder}">
             </div>
             <div class="form-group">
-                <label for="email"><i class="fas fa-envelope"></i> Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Seu email">
+                <label for="email"><i class="fas fa-envelope"></i> <span th:text="#{register.email}">Email:</span></label>
+                <input type="email" id="email" name="email" required th:placeholder="#{register.email.placeholder}">
             </div>
             <div class="form-group">
-                <label for="senha"><i class="fas fa-lock"></i> Senha:</label>
-                <input type="password" id="senha" name="senha" required placeholder="Sua senha">
+                <label for="senha"><i class="fas fa-lock"></i> <span th:text="#{register.password}">Senha:</span></label>
+                <input type="password" id="senha" name="senha" required th:placeholder="#{register.password.placeholder}">
             </div>
             <div class="form-group">
-                <label for="confirmarSenha"><i class="fas fa-lock"></i> Confirmar Senha:</label>
-                <input type="password" id="confirmarSenha" name="confirmarSenha" required placeholder="Confirme sua senha">
+                <label for="confirmarSenha"><i class="fas fa-lock"></i> <span th:text="#{register.confirm.password}">Confirmar Senha:</span></label>
+                <input type="password" id="confirmarSenha" name="confirmarSenha" required th:placeholder="#{register.confirm.password.placeholder}">
             </div>
-            <button type="submit"><i class="fas fa-user-plus"></i> Registrar</button>
+            <button type="submit"><i class="fas fa-user-plus"></i> <span th:text="#{register.submit}">Registrar</span></button>
         </form>
-        <p class="login-link">Já tem uma conta? <a th:href="@{/login}">Faça login</a></p>
+        <p class="login-link">
+            <span th:text="#{register.login.question}">Já tem uma conta?</span> 
+            <a th:href="@{/login}" th:text="#{register.login.link}">Faça login</a>
+        </p>
     </main>
 
     <footer class="footer">
-        <p>© 2025 PONABRI - Todos os direitos reservados</p>
+        <p th:text="#{footer.copyright}">© 2025 PONABRI - Todos os direitos reservados</p>
     </footer>
 
     <script src="/js/auth.js"></script>
+    <script th:replace="fragments/header :: i18n-script"></script>
 </body>
 </html>

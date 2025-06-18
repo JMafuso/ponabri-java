@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Abrigos - PONABRI</title>
+    <title th:text="#{shelters.title}">Gerenciamento de Abrigos - PONABRI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style th:replace="fragments/header :: header-styles"></style>
     <style>
         :root {
             --cor-principal: #FF8C00;
@@ -39,32 +40,6 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-
-        .header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
-            top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--cor-principal);
-            transition: var(--transicao-padrao);
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
         }
 
         .content-container {
@@ -303,7 +278,60 @@
             }
         }
     </style>
+</head>
+<body>
+    <header th:replace="fragments/header :: header"></header>
+
+    <main class="content-container">
+        <h1 th:text="#{shelters.title}">Gerenciamento de Abrigos</h1>
+
+        <div class="table-container">
+            <h2>Lista de Abrigos</h2>
+            <ul id="abrigo-list"></ul>
+        </div>
+
+        <div class="form-container">
+            <h2 id="form-title" th:text="#{shelters.add.new}">Criar Abrigo</h2>
+            <form id="abrigo-form">
+                <div class="form-group">
+                    <label for="nomeLocal"><i class="fas fa-building"></i> <span th:text="#{shelters.form.name}">Nome do Local:</span></label>
+                    <input type="text" id="nomeLocal" name="nomeLocal" required th:placeholder="#{shelters.form.name}">
+                </div>
+                <div class="form-group">
+                    <label for="endereco"><i class="fas fa-map-marker-alt"></i> <span th:text="#{shelters.form.address}">Endereço:</span></label>
+                    <input type="text" id="endereco" name="endereco" required th:placeholder="#{shelters.form.address}">
+                </div>
+                <div class="form-group">
+                    <label for="regiao"><i class="fas fa-map"></i> <span th:text="#{shelters.form.address}">Região:</span></label>
+                    <input type="text" id="regiao" name="regiao" required th:placeholder="#{shelters.form.address}">
+                </div>
+                <div class="form-group">
+                    <label for="capacidadePessoas"><i class="fas fa-users"></i> <span th:text="#{shelters.form.capacity}">Capacidade de Pessoas:</span></label>
+                    <input type="number" id="capacidadePessoas" name="capacidadePessoas" required min="0" th:placeholder="#{shelters.form.capacity}">
+                </div>
+                <div class="form-group">
+                    <label for="capacidadeCarros"><i class="fas fa-car"></i> <span th:text="#{shelters.form.capacity}">Capacidade de Carros:</span></label>
+                    <input type="number" id="capacidadeCarros" name="capacidadeCarros" required min="0" th:placeholder="#{shelters.form.capacity}">
+                </div>
+                <div class="form-group">
+                    <label for="contatoResponsavel"><i class="fas fa-phone"></i> <span th:text="#{shelters.form.name}">Contato Responsável:</span></label>
+                    <input type="text" id="contatoResponsavel" name="contatoResponsavel" required th:placeholder="#{shelters.form.name}">
+                </div>
+                <div class="form-group">
+                    <label for="descricao"><i class="fas fa-info-circle"></i> <span th:text="#{shelters.form.name}">Descrição:</span></label>
+                    <textarea id="descricao" name="descricao" required th:placeholder="#{shelters.form.name}"></textarea>
+                </div>
+                <button type="submit" id="submit-button"><i class="fas fa-plus"></i> <span th:text="#{shelters.add.new}">Criar Abrigo</span></button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p th:text="#{footer.copyright}">© 2025 PONABRI - Todos os direitos reservados</p>
+    </footer>
+
     <script src="/js/authInterceptor.js"></script>
+    <script th:replace="fragments/header :: i18n-script"></script>
     <script>
         let currentEditId = null;
 
@@ -321,7 +349,7 @@
                     list.innerHTML = '<li style="text-align: center; color: #666;">Nenhum abrigo cadastrado.</li>';
                     return;
                 }
-
+            
                 abrigos.forEach(abrigo => {
                     const item = document.createElement('li');
                     item.innerHTML = `
@@ -335,10 +363,10 @@
                         </div>
                         <div class="btn-group">
                             <button class="btn-edit" onclick="populateEditForm(${JSON.stringify(abrigo).replace(/"/g, '&quot;')})">
-                                <i class="fas fa-edit"></i> Editar
+                                <i class="fas fa-edit"></i> <span th:text="#{button.edit}">Editar</span>
                             </button>
                             <button class="btn-delete" onclick="deleteAbrigo(${abrigo.id})">
-                                <i class="fas fa-trash-alt"></i> Excluir
+                                <i class="fas fa-trash-alt"></i> <span th:text="#{button.delete}">Excluir</span>
                             </button>
                         </div>
                     `;
@@ -393,7 +421,7 @@
             form.capacidadeCarros.value = abrigo.capacidadeCarros;
             form.contatoResponsavel.value = abrigo.contatoResponsavel;
             form.descricao.value = abrigo.descricao;
-            document.getElementById('submit-button').innerHTML = '<i class="fas fa-save"></i> Atualizar Abrigo';
+            document.getElementById('submit-button').innerHTML = '<i class="fas fa-save"></i> <span th:text="#{button.save}">Atualizar Abrigo</span>';
             document.getElementById('form-title').textContent = 'Atualizar Abrigo';
             window.scrollTo({ top: document.getElementById('form-title').offsetTop - 100, behavior: 'smooth' });
         }
@@ -429,7 +457,7 @@
                 alert('Abrigo atualizado com sucesso!');
                 form.reset();
                 currentEditId = null;
-                document.getElementById('submit-button').innerHTML = '<i class="fas fa-plus"></i> Criar Abrigo';
+                document.getElementById('submit-button').innerHTML = '<i class="fas fa-plus"></i> <span th:text="#{shelters.add.new}">Criar Abrigo</span>';
                 document.getElementById('form-title').textContent = 'Criar Abrigo';
                 fetchAbrigos();
             } catch (error) {
@@ -472,58 +500,5 @@
             });
         };
     </script>
-</head>
-<body>
-    <header class="header">
-        <div class="logo">PONABRI</div>
-    </header>
-
-    <main class="content-container">
-        <h1>Gerenciamento de Abrigos</h1>
-
-        <div class="table-container">
-            <h2>Lista de Abrigos</h2>
-            <ul id="abrigo-list"></ul>
-        </div>
-
-        <div class="form-container">
-            <h2 id="form-title">Criar Abrigo</h2>
-            <form id="abrigo-form">
-                <div class="form-group">
-                    <label for="nomeLocal"><i class="fas fa-building"></i> Nome do Local:</label>
-                    <input type="text" id="nomeLocal" name="nomeLocal" required placeholder="Nome do abrigo">
-                </div>
-                <div class="form-group">
-                    <label for="endereco"><i class="fas fa-map-marker-alt"></i> Endereço:</label>
-                    <input type="text" id="endereco" name="endereco" required placeholder="Endereço completo">
-                </div>
-                <div class="form-group">
-                    <label for="regiao"><i class="fas fa-map"></i> Região:</label>
-                    <input type="text" id="regiao" name="regiao" required placeholder="Região do abrigo">
-                </div>
-                <div class="form-group">
-                    <label for="capacidadePessoas"><i class="fas fa-users"></i> Capacidade de Pessoas:</label>
-                    <input type="number" id="capacidadePessoas" name="capacidadePessoas" required min="0" placeholder="Número de pessoas">
-                </div>
-                <div class="form-group">
-                    <label for="capacidadeCarros"><i class="fas fa-car"></i> Capacidade de Carros:</label>
-                    <input type="number" id="capacidadeCarros" name="capacidadeCarros" required min="0" placeholder="Número de carros">
-                </div>
-                <div class="form-group">
-                    <label for="contatoResponsavel"><i class="fas fa-phone"></i> Contato Responsável:</label>
-                    <input type="text" id="contatoResponsavel" name="contatoResponsavel" required placeholder="Contato do responsável">
-                </div>
-                <div class="form-group">
-                    <label for="descricao"><i class="fas fa-info-circle"></i> Descrição:</label>
-                    <textarea id="descricao" name="descricao" required placeholder="Descrição detalhada do abrigo"></textarea>
-                </div>
-                <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Criar Abrigo</button>
-            </form>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <p>© 2025 PONABRI - Todos os direitos reservados</p>
-    </footer>
 </body>
 </html>

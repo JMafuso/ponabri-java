@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuários - PONABRI</title>
+    <title th:text="#{users.title}">Usuários - PONABRI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style th:replace="fragments/header :: header-styles"></style>
     <style>
         :root {
             --cor-principal: #FF8C00;
@@ -39,32 +40,6 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-
-        .header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
-            top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--cor-principal);
-            transition: var(--transicao-padrao);
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
         }
 
         .content-container {
@@ -158,7 +133,6 @@
         @media (max-width: 768px) {
             .content-container {
                 padding: 1rem;
-                margin: 0 1rem;
             }
 
             h1 {
@@ -177,7 +151,25 @@
             }
         }
     </style>
+</head>
+<body>
+    <header th:replace="fragments/header :: header"></header>
+
+    <main class="content-container">
+        <div class="table-container">
+            <h1 th:text="#{users.title}">Gerenciamento de Usuários</h1>
+            <ul id="usuario-list">
+                <!-- Lista de usuários será carregada dinamicamente -->
+            </ul>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p th:text="#{footer.copyright}">© 2025 PONABRI - Todos os direitos reservados</p>
+    </footer>
+
     <script src="/js/authInterceptor.js"></script>
+    <script th:replace="fragments/header :: i18n-script"></script>
     <script>
         async function fetchUsuarios() {
             try {
@@ -198,11 +190,11 @@
                     const item = document.createElement('li');
                     item.innerHTML = `
                         <div class="usuario-info">
-                            <i class="fas fa-user-circle"></i>
+                            <i class="fas fa-user"></i>
                             <div class="usuario-details">
-                                <span class="usuario-id">ID: ${usuario.id}</span>
-                                <span class="usuario-nome">${usuario.nome}</span>
-                                <span class="usuario-email">${usuario.email}</span>
+                                <div class="usuario-id">ID: ${usuario.id}</div>
+                                <div class="usuario-nome">${usuario.nome}</div>
+                                <div class="usuario-email">${usuario.email}</div>
                             </div>
                         </div>
                     `;
@@ -218,21 +210,5 @@
             fetchUsuarios();
         };
     </script>
-</head>
-<body>
-    <header class="header">
-        <div class="logo">PONABRI</div>
-    </header>
-
-    <main class="content-container">
-        <h1>Lista de Usuários</h1>
-        <div class="table-container">
-            <ul id="usuario-list"></ul>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <p>© 2025 PONABRI - Todos os direitos reservados</p>
-    </footer>
 </body>
 </html>
