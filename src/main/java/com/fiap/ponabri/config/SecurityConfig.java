@@ -2,6 +2,7 @@ package com.fiap.ponabri.config;
 
 import com.fiap.ponabri.security.JwtAuthenticationFilter;
 import com.fiap.ponabri.service.CustomUserDetailsService;
+import com.fiap.ponabri.security.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +26,16 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/register", "/api/auth/**", "/api/auth/register", "/js/**", "/css/**", "/images/**", "/static/**", "/home").permitAll()
+                .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                 .requestMatchers("/abrigos/**").permitAll()
                 .requestMatchers("/reservas/**").permitAll()
                 .requestMatchers("/api/send-message").permitAll()
@@ -39,7 +44,11 @@ public class SecurityConfig {
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .oauth2Login(oauth2 -> oauth2
+                .loginPage("/login")
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+            );
 
         return http.build();
     }

@@ -52,7 +52,7 @@
             backdrop-filter: blur(12px);
             width: 100%;
             max-width: 400px;
-            margin: 2rem;
+            margin: 10rem;
         }
 
         h2 {
@@ -164,6 +164,9 @@
             </div>
             <button type="submit"><i class="fas fa-sign-in-alt"></i> <span th:text="#{login.submit}">Entrar</span></button>
         </form>
+        <a href="/oauth2/authorization/github" style="display: block; margin-top: 1rem; text-align: center; background-color: #333; color: white; padding: 0.75rem; border-radius: 8px; text-decoration: none; font-weight: bold;">
+            <i class="fab fa-github"></i> Entrar com GitHub
+        </a>
         <p class="register-link">
             <span th:text="#{login.register.question}">Não tem uma conta?</span> 
             <a th:href="@{/register}" th:text="#{login.register.link}">Registre-se</a>

@@ -30,4 +30,10 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private Set<Reserva> reservas;
+
+    public Usuario(String nome, String email, String role) {
+        this.nome = nome;
+        this.email = email;
+        this.role = role;
+    }
 }
