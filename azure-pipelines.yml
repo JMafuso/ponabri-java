@@ -2,11 +2,11 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
-  azureSubscription: 'NomeDaSuaConexaoAzure'  # Substitua pelo nome da sua conexão de serviço Azure
-  appName: 'nome-do-seu-app'                  # Substitua pelo nome do seu Azure App Service
+  azureSubscription: 'ponabri-abfmh6c4gwdmbngy.brazilsouth-01.azurewebsites.net'  
+  appName: 'ponabri'                
   packagePath: 'target/*.jar'
 
 steps:
@@ -27,7 +27,7 @@ steps:
 - task: AzureWebApp@1
   inputs:
     azureSubscription: '$(azureSubscription)'
-    appType: 'webAppLinux'  # Ajuste para 'webApp' se for Windows
+    appType: 'webApp' 
     appName: '$(appName)'
     package: '$(System.DefaultWorkingDirectory)/target/*.jar'
   displayName: 'Deploy to Azure Web App'
