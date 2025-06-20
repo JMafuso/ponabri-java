@@ -22,7 +22,7 @@ public class Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String senha;
 
     @Column(nullable = false)
@@ -35,5 +35,9 @@ public class Usuario {
         this.nome = nome;
         this.email = email;
         this.role = role;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

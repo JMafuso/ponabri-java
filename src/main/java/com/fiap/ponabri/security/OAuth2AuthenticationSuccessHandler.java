@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,10 +21,12 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
     private final JwtUtils jwtUtils;
     private final UsuarioRepository usuarioRepository;
+    private final ApplicationContext applicationContext;
 
-    public OAuth2AuthenticationSuccessHandler(JwtUtils jwtUtils, UsuarioRepository usuarioRepository) {
+    public OAuth2AuthenticationSuccessHandler(JwtUtils jwtUtils, UsuarioRepository usuarioRepository, ApplicationContext applicationContext) {
         this.jwtUtils = jwtUtils;
         this.usuarioRepository = usuarioRepository;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -37,7 +41,9 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             return;
         }
 
-        // Check if user exists, if not create new user with role USER
+        PasswordEncoder passwordEncoder = applicationContext.getBean(PasswordEncoder.class);
+
+        // Check if user exists, if not create new user with role USER and default password
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
         Usuario usuario;
         if (usuarioOpt.isPresent()) {
@@ -48,16 +54,14 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
                 email,
                 "USER"
             );
+            usuario.setSenha(passwordEncoder.encode("oauth2user"));
             usuarioRepository.save(usuario);
         }
 
         // Generate JWT token
         String token = jwtUtils.generateJwtToken(email);
 
-        // Return token in response header or body (here in header)
-        response.setHeader("Authorization", "Bearer " + token);
-
-        // You can also redirect to frontend with token as parameter or handle as needed
-        response.sendRedirect("/home?token=" + token);
+        // Redirect to frontend to oauth2-login page with token as parameter
+        response.sendRedirect("/oauth2-login?token=" + token);
     }
 }

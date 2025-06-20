@@ -285,6 +285,12 @@
     <main class="content-container">
         <h1 th:text="#{shelters.title}">Gerenciamento de Abrigos</h1>
 
+        <div style="margin-bottom: 1rem;">
+            <button onclick="window.location.href='/home'" style="background-color: var(--cor-principal); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                <i class="fas fa-home"></i> Voltar para a Home
+            </button>
+        </div>
+
         <div class="table-container">
             <h2>Lista de Abrigos</h2>
             <ul id="abrigo-list"></ul>

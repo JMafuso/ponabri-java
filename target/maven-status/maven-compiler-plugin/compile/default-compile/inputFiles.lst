@@ -8,6 +8,7 @@ C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\A
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\AiController.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\AuthController.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\HomeController.java
+C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\OAuth2LoginController.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\PagesController.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\RabbitMqController.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\controllers\ReservasController.java
@@ -34,6 +35,7 @@ C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\repositories\
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\repositories\AvisoRepository.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\repositories\ReservaRepository.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\repositories\UsuarioRepository.java
+C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\security\CustomOAuth2UserService.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\security\JwtAuthenticationFilter.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\security\JwtTokenProvider.java
 C:\Users\godma\Desktop\ponabri-java\src\main\java\com\fiap\ponabri\security\JwtUtils.java

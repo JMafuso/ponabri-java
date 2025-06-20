@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login OAuth2</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Extrai o token da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            if (token) {
+                // Armazena o token no localStorage
+                localStorage.setItem('jwtToken', token);
+                // Redireciona para a home
+                window.location.href = '/home';
+            } else {
+                console.error('Token não encontrado na URL');
+            }
+        });
+    </script>
+</head>
+<body>
+    <p>Processando login...</p>
+</body>
+</html>
