@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  azureSubscription: 'ponabri-abfmh6c4gwdmbngy.brazilsouth-01.azurewebsites.net'  
+  azureSubscription: 'ConexaoPonabriAzure'  
   appName: 'ponabri'                
   packagePath: 'target/*.jar'
 
