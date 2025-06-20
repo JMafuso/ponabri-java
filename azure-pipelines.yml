@@ -1,42 +1,49 @@
 # azure-pipelines.yml
 
 trigger:
-- main # Dispara a pipeline quando há mudanças na branch 'main'
+- main
 
 pool:
-  vmImage: 'windows-latest' # Agente hospedado no Windows
+  vmImage: 'windows-latest'
 
 variables:
-  azureSubscription: 'ConexaoPonabriAzure'  # Nome da sua conexão de serviço Azure
-  appName: 'ponabri'                      # Nome do seu Azure App Service
+  azureSubscription: 'ConexaoPonabriAzure'
+  appName: 'ponabri'
 
 steps:
-- task: JavaToolInstaller@0 
+- task: JavaToolInstaller@0
   displayName: 'Instalar JDK 21 no Agente'
   inputs:
-    versionSpec: '21' 
-    jdkArchitectureOption: 'x64' 
-    jdkSourceOption: 'PreInstalled' 
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+- script: |
+    echo Iniciando container RabbitMQ...
+    docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
+    echo Aguardando RabbitMQ iniciar (15 segundos)...
+    sleep 15
+  displayName: 'Iniciar RabbitMQ para Testes'
 
 - task: Maven@3
-  displayName: 'Build com Maven (compilar e empacotar)'
+  displayName: 'Build com Maven (compilar e rodar testes)'
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean install'
-    options: '' 
+
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publicar Artefato de Build'
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/target' 
-    ArtifactName: 'drop' 
-    publishLocation: 'Container' 
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
 - task: AzureWebApp@1
   displayName: 'Deploy para Azure Web App'
   inputs:
-    azureSubscription: '$(azureSubscription)' 
-    appType: 'webApp' 
+    azureSubscription: '$(azureSubscription)'
+    appType: 'webApp'
     appName: '$(appName)'
-    package: '$(System.DefaultWorkingDirectory)/target/*.jar' 
+    package: '$(System.DefaultWorkingDirectory)/target/*.jar'
     runtimeStack: 'JAVA|21'
