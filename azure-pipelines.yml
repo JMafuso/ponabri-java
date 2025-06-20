@@ -1,33 +1,42 @@
+# azure-pipelines.yml
+
 trigger:
-- main
+- main # Dispara a pipeline quando há mudanças na branch 'main'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-latest' # Agente hospedado no Windows
 
 variables:
-  azureSubscription: 'ConexaoPonabriAzure'  
-  appName: 'ponabri'                
-  packagePath: 'target/*.jar'
+  azureSubscription: 'ConexaoPonabriAzure'  # Nome da sua conexão de serviço Azure
+  appName: 'ponabri'                      # Nome do seu Azure App Service
 
 steps:
+- task: JavaToolInstaller@0 
+  displayName: 'Instalar JDK 21 no Agente'
+  inputs:
+    versionSpec: '21' 
+    jdkArchitectureOption: 'x64' 
+    jdkSourceOption: 'PreInstalled' 
+
 - task: Maven@3
+  displayName: 'Build com Maven (compilar e empacotar)'
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean package'
-    options: '-DskipTests'
-  displayName: 'Build with Maven'
+    goals: 'clean install'
+    options: '' 
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publicar Artefato de Build'
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-  displayName: 'Publish Artifact'
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/target' 
+    ArtifactName: 'drop' 
+    publishLocation: 'Container' 
 
 - task: AzureWebApp@1
+  displayName: 'Deploy para Azure Web App'
   inputs:
-    azureSubscription: '$(azureSubscription)'
+    azureSubscription: '$(azureSubscription)' 
     appType: 'webApp' 
     appName: '$(appName)'
-    package: '$(System.DefaultWorkingDirectory)/target/*.jar'
-  displayName: 'Deploy to Azure Web App'
+    package: '$(System.DefaultWorkingDirectory)/target/*.jar' 
+    runtimeStack: 'JAVA|21'
