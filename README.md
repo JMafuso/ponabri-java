@@ -30,7 +30,7 @@ https://youtu.be/Ne9nenbZS9E
 
 ## Tecnologias Utilizadas
 
-- Java 17
+- Java 21
 - Spring Boot 3.3.0
 - Maven
 - Spring Data JPA
